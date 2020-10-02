@@ -11,6 +11,7 @@
 *.sln.docstates
 *.json
 *.config
+!App.config #Except for App.config
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
