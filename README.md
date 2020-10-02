@@ -4,7 +4,7 @@ W projekcie użyto wzorzec decorator. Schemat blokowy klas przedstawiono na rysu
 
 Do zapisywania zamówień wykorzystano bazę MSSQL. Baza danych została dodana lokalnie w projekcie. Ułożenie tabel pokazano na rysunku poniżej.
 
-![](https://github.com/kamasjdev/testrepo/blob/main/schemat_bazy_danych.png)
+![](http://s6939.chomikuj.pl/ChomikImage.aspx?e=CyDseR24i0lZgXC9396Khe7sJtWF5bey4h5jOYrQqmYMS_OJ0eU4rQL1jsNAVtRD5yyB0fSuE2Gy9uIv_R3ki6a9FEzbWPzvTT_D3er-TCs&pv=2)
 
 
 
