@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ZamowieniaRestauracja.Components;
+
+namespace ZamowieniaRestauracja.Decorator
+{
+    public class ProductDecorator : Product
+    {
+        protected Product _produkt;
+        public ProductDecorator(Product produkt)
+        {
+            _produkt = produkt;
+        }
+
+        public override double CalculateCost()
+        {
+            return _produkt.CalculateCost();
+        }
+
+        public override string GetName()
+        {
+            return _produkt.GetName();
+        }
+
+        public override string ToString()
+        {
+            return $"{_produkt.GetName()}, cena {_produkt.CalculateCost()}zł";
+        }
+    }
+}

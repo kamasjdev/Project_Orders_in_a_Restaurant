@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZamowieniaRestauracja", "ZamowieniaRestauracja\ZamowieniaRestauracja.csproj", "{4F009935-CE4C-439D-8608-AAC0C9A8495A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZamowieniaRestauracjaTests", "ZamowieniaRestauracjaTests\ZamowieniaRestauracjaTests.csproj", "{6A3CEE13-1C79-4111-ACC5-24F8C2996FBF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F009935-CE4C-439D-8608-AAC0C9A8495A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F009935-CE4C-439D-8608-AAC0C9A8495A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F009935-CE4C-439D-8608-AAC0C9A8495A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F009935-CE4C-439D-8608-AAC0C9A8495A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A3CEE13-1C79-4111-ACC5-24F8C2996FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A3CEE13-1C79-4111-ACC5-24F8C2996FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A3CEE13-1C79-4111-ACC5-24F8C2996FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A3CEE13-1C79-4111-ACC5-24F8C2996FBF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D60A256-78F7-4B15-8FD5-758B4004456F}
+	EndGlobalSection
+EndGlobal
