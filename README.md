@@ -6,6 +6,8 @@ Do zapisywania zamówień wykorzystano bazę MSSQL. Baza danych została dodana 
 
 ![alt text](https://github.com/kamasjdev/testrepo/blob/main/schemat_bazy_danych.png)
 
+
+
 Poniżej przedstawiono kod do utworzenia bazy danych
 ```sql
 CREATE TABLE [dbo].[Produkty](
