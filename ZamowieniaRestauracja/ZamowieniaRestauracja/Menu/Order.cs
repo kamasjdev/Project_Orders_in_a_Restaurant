@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZamowieniaRestauracja.Components;
 
 namespace ZamowieniaRestauracja
@@ -40,7 +37,7 @@ namespace ZamowieniaRestauracja
             return _product[i];
         }
 
-        public override string GetName() => Convert.ToString(_product.GetHashCode());
+        public override string GetName() => $"Nr Zamówienia {Get_Order_Nr()}";
 
         public override string ToString()
         {

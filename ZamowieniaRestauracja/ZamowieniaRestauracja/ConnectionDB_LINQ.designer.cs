@@ -30,12 +30,12 @@ namespace ZamowieniaRestauracja
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertZamowienia(Zamowienia instance);
-    partial void UpdateZamowienia(Zamowienia instance);
-    partial void DeleteZamowienia(Zamowienia instance);
     partial void InsertProdukty(Produkty instance);
     partial void UpdateProdukty(Produkty instance);
     partial void DeleteProdukty(Produkty instance);
+    partial void InsertZamowienia(Zamowienia instance);
+    partial void UpdateZamowienia(Zamowienia instance);
+    partial void DeleteZamowienia(Zamowienia instance);
     #endregion
 		
 		public ConnectionDB_LINQDataContext() : 
@@ -68,6 +68,14 @@ namespace ZamowieniaRestauracja
 			OnCreated();
 		}
 		
+		public System.Data.Linq.Table<Produkty> Produkty
+		{
+			get
+			{
+				return this.GetTable<Produkty>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Zamowienia> Zamowienia
 		{
 			get
@@ -75,12 +83,179 @@ namespace ZamowieniaRestauracja
 				return this.GetTable<Zamowienia>();
 			}
 		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Produkty")]
+	public partial class Produkty : INotifyPropertyChanging, INotifyPropertyChanged
+	{
 		
-		public System.Data.Linq.Table<Produkty> Produkty
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _pr_id;
+		
+		private string _pr_nazwa;
+		
+		private float _pr_cena;
+		
+		private int _zm_id;
+		
+		private EntityRef<Zamowienia> _Zamowienia;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onpr_idChanging(int value);
+    partial void Onpr_idChanged();
+    partial void Onpr_nazwaChanging(string value);
+    partial void Onpr_nazwaChanged();
+    partial void Onpr_cenaChanging(float value);
+    partial void Onpr_cenaChanged();
+    partial void Onzm_idChanging(int value);
+    partial void Onzm_idChanged();
+    #endregion
+		
+		public Produkty()
+		{
+			this._Zamowienia = default(EntityRef<Zamowienia>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pr_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int pr_id
 		{
 			get
 			{
-				return this.GetTable<Produkty>();
+				return this._pr_id;
+			}
+			set
+			{
+				if ((this._pr_id != value))
+				{
+					this.Onpr_idChanging(value);
+					this.SendPropertyChanging();
+					this._pr_id = value;
+					this.SendPropertyChanged("pr_id");
+					this.Onpr_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pr_nazwa", DbType="NChar(50) NOT NULL", CanBeNull=false)]
+		public string pr_nazwa
+		{
+			get
+			{
+				return this._pr_nazwa;
+			}
+			set
+			{
+				if ((this._pr_nazwa != value))
+				{
+					this.Onpr_nazwaChanging(value);
+					this.SendPropertyChanging();
+					this._pr_nazwa = value;
+					this.SendPropertyChanged("pr_nazwa");
+					this.Onpr_nazwaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pr_cena", DbType="Real NOT NULL")]
+		public float pr_cena
+		{
+			get
+			{
+				return this._pr_cena;
+			}
+			set
+			{
+				if ((this._pr_cena != value))
+				{
+					this.Onpr_cenaChanging(value);
+					this.SendPropertyChanging();
+					this._pr_cena = value;
+					this.SendPropertyChanged("pr_cena");
+					this.Onpr_cenaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_zm_id", DbType="Int NOT NULL")]
+		public int zm_id
+		{
+			get
+			{
+				return this._zm_id;
+			}
+			set
+			{
+				if ((this._zm_id != value))
+				{
+					if (this._Zamowienia.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onzm_idChanging(value);
+					this.SendPropertyChanging();
+					this._zm_id = value;
+					this.SendPropertyChanged("zm_id");
+					this.Onzm_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Zamowienia_Produkty", Storage="_Zamowienia", ThisKey="zm_id", OtherKey="zm_id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Zamowienia Zamowienia
+		{
+			get
+			{
+				return this._Zamowienia.Entity;
+			}
+			set
+			{
+				Zamowienia previousValue = this._Zamowienia.Entity;
+				if (((previousValue != value) 
+							|| (this._Zamowienia.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Zamowienia.Entity = null;
+						previousValue.Produkty.Remove(this);
+					}
+					this._Zamowienia.Entity = value;
+					if ((value != null))
+					{
+						value.Produkty.Add(this);
+						this._zm_id = value.zm_id;
+					}
+					else
+					{
+						this._zm_id = default(int);
+					}
+					this.SendPropertyChanged("Zamowienia");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}
@@ -268,181 +443,6 @@ namespace ZamowieniaRestauracja
 		{
 			this.SendPropertyChanging();
 			entity.Zamowienia = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Produkty")]
-	public partial class Produkty : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _pr_id;
-		
-		private string _pr_nazwa;
-		
-		private float _pr_cena;
-		
-		private int _zm_id;
-		
-		private EntityRef<Zamowienia> _Zamowienia;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void Onpr_idChanging(int value);
-    partial void Onpr_idChanged();
-    partial void Onpr_nazwaChanging(string value);
-    partial void Onpr_nazwaChanged();
-    partial void Onpr_cenaChanging(float value);
-    partial void Onpr_cenaChanged();
-    partial void Onzm_idChanging(int value);
-    partial void Onzm_idChanged();
-    #endregion
-		
-		public Produkty()
-		{
-			this._Zamowienia = default(EntityRef<Zamowienia>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pr_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int pr_id
-		{
-			get
-			{
-				return this._pr_id;
-			}
-			set
-			{
-				if ((this._pr_id != value))
-				{
-					this.Onpr_idChanging(value);
-					this.SendPropertyChanging();
-					this._pr_id = value;
-					this.SendPropertyChanged("pr_id");
-					this.Onpr_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pr_nazwa", DbType="NChar(50) NOT NULL", CanBeNull=false)]
-		public string pr_nazwa
-		{
-			get
-			{
-				return this._pr_nazwa;
-			}
-			set
-			{
-				if ((this._pr_nazwa != value))
-				{
-					this.Onpr_nazwaChanging(value);
-					this.SendPropertyChanging();
-					this._pr_nazwa = value;
-					this.SendPropertyChanged("pr_nazwa");
-					this.Onpr_nazwaChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pr_cena", DbType="Real NOT NULL")]
-		public float pr_cena
-		{
-			get
-			{
-				return this._pr_cena;
-			}
-			set
-			{
-				if ((this._pr_cena != value))
-				{
-					this.Onpr_cenaChanging(value);
-					this.SendPropertyChanging();
-					this._pr_cena = value;
-					this.SendPropertyChanged("pr_cena");
-					this.Onpr_cenaChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_zm_id", DbType="Int NOT NULL")]
-		public int zm_id
-		{
-			get
-			{
-				return this._zm_id;
-			}
-			set
-			{
-				if ((this._zm_id != value))
-				{
-					if (this._Zamowienia.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onzm_idChanging(value);
-					this.SendPropertyChanging();
-					this._zm_id = value;
-					this.SendPropertyChanged("zm_id");
-					this.Onzm_idChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Zamowienia_Produkty", Storage="_Zamowienia", ThisKey="zm_id", OtherKey="zm_id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public Zamowienia Zamowienia
-		{
-			get
-			{
-				return this._Zamowienia.Entity;
-			}
-			set
-			{
-				Zamowienia previousValue = this._Zamowienia.Entity;
-				if (((previousValue != value) 
-							|| (this._Zamowienia.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Zamowienia.Entity = null;
-						previousValue.Produkty.Remove(this);
-					}
-					this._Zamowienia.Entity = value;
-					if ((value != null))
-					{
-						value.Produkty.Add(this);
-						this._zm_id = value.zm_id;
-					}
-					else
-					{
-						this._zm_id = default(int);
-					}
-					this.SendPropertyChanged("Zamowienia");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
 		}
 	}
 }

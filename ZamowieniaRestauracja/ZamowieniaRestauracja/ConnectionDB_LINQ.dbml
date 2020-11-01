@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Database_of_Restaurants" Class="ConnectionDB_LINQDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database_of_Restaurants.mdf;Integrated Security=True" SettingsObjectName="ZamowieniaRestauracja.Properties.Settings" SettingsPropertyName="Database_of_RestaurantsConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Produkty" Member="Produkty">
+    <Type Name="Produkty">
+      <Column Name="pr_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="pr_nazwa" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="pr_cena" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
+      <Column Name="zm_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Zamowienia_Produkty" Member="Zamowienia" ThisKey="zm_id" OtherKey="zm_id" Type="Zamowienia" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.Zamowienia" Member="Zamowienia">
     <Type Name="Zamowienia">
       <Column Name="zm_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -8,15 +17,6 @@
       <Column Name="zm_koszt" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
       <Column Name="zm_email" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
       <Association Name="Zamowienia_Produkty" Member="Produkty" ThisKey="zm_id" OtherKey="zm_id" Type="Produkty" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Produkty" Member="Produkty">
-    <Type Name="Produkty">
-      <Column Name="pr_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="pr_nazwa" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="pr_cena" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
-      <Column Name="zm_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Zamowienia_Produkty" Member="Zamowienia" ThisKey="zm_id" OtherKey="zm_id" Type="Zamowienia" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
 </Database>

@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ZamowieniaRestauracja;
 using ZamowieniaRestauracja.Components;
 using ZamowieniaRestauracja.ConcreteComponents;
-using ZamowieniaRestauracja.ConcreteDecorator;
 
 namespace ZamowieniaRestauracjaTests
 {
