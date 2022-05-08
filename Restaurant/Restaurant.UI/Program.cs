@@ -2,6 +2,7 @@
 using Restaurant.ApplicationLogic;
 using Restaurant.Infrastructure;
 using System;
+using System.Configuration;
 using System.Windows.Forms;
 
 namespace Restaurant.UI
@@ -16,7 +17,7 @@ namespace Restaurant.UI
         {
             var container = new WindsorContainer();
             container.AddApplicationLogic();
-            container.AddInfrastructure();
+            container.AddInfrastructure(ConfigurationManager.AppSettings);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

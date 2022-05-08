@@ -89,7 +89,7 @@ namespace Restaurant.Domain.ValueObjects
             {
                 fractional.Append("0");
             }
-            return $"{WholePart}.{FractionalPart}";
+            return $"{WholePart}.{fractional}";
         }
     }
 }

@@ -2,10 +2,10 @@
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
-using Shouldly;
 using Restaurant.UI;
 using Restaurant.UI.Components;
 using Restaurant.UI.ConcreteComponents;
+using Shouldly;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Restaurant.UnitTests

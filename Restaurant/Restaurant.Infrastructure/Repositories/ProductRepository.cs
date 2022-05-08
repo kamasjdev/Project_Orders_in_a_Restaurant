@@ -2,11 +2,19 @@
 using Restaurant.Domain.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Restaurant.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
+        private readonly IDbConnection _dbConnection;
+
+        public ProductRepository(IDbConnection dbConnection)
+        {
+            _dbConnection = dbConnection;
+        }
+
         public Guid Add(Product entity)
         {
             throw new NotImplementedException();
