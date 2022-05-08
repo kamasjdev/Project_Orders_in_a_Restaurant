@@ -19,10 +19,10 @@ namespace Restaurant.UI
         static void Main()
         {
             var container = new WindsorContainer();
-            container.Register(Castle.MicroKernel.Registration.Component.For<Form1>());
-            container.Register(Castle.MicroKernel.Registration.Component.For<Menu>());
-            container.Register(Castle.MicroKernel.Registration.Component.For<Settings>());
-            container.Register(Castle.MicroKernel.Registration.Component.For<History>());
+            container.Register(Castle.MicroKernel.Registration.Component.For<Form1>().LifestyleSingleton());
+            container.Register(Castle.MicroKernel.Registration.Component.For<Menu>().LifestyleSingleton());
+            container.Register(Castle.MicroKernel.Registration.Component.For<Settings>().LifestyleSingleton());
+            container.Register(Castle.MicroKernel.Registration.Component.For<History>().LifestyleSingleton());
             container.AddApplicationLogic();
             var connectionStrings = new NameValueCollection();
             foreach (ConnectionStringSettings connectionStringSettings in ConfigurationManager.ConnectionStrings)
@@ -34,7 +34,6 @@ namespace Restaurant.UI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(container.Resolve<Form1>());
-            //Application.Run(new Form1(container.Resolve<IRequestHandler>()));
         }
     }
 }
