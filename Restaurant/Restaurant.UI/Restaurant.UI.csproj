@@ -216,6 +216,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Restaurant.Infrastructure\Restaurant.Infrastructure.csproj">
+      <Project>{4e6dbbe2-0e71-4611-97d4-1640291aec7f}</Project>
+      <Name>Restaurant.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
