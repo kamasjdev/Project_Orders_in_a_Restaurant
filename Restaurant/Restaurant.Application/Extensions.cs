@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Castle.Windsor;
 
-namespace Restaurant.Application
+namespace Restaurant.ApplicationLogic
 {
     public static class Extensions
     {
-
+        public static IWindsorContainer AddApplicationLogic(this IWindsorContainer container)
+        {
+            return container;
+        }
     }
 }

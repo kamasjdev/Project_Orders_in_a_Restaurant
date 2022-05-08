@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace Restaurant.Domain
+﻿namespace Restaurant.Domain
 {
     public static class Extensions
     {
-
     }
 }
