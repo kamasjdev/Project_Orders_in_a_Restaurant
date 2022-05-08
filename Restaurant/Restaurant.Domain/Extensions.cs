@@ -2,7 +2,7 @@
 
 namespace Restaurant.Domain
 {
-    public class Class1
+    public static class Extensions
     {
 
     }
