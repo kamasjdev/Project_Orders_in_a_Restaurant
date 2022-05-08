@@ -95,7 +95,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Restaurant.UI\Restaurant.UI.csproj">
       <Project>{4f009935-ce4c-439d-8608-aac0c9a8495a}</Project>
-      <Name>ZamowieniaRestauracja</Name>
+      <Name>Restaurant.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
