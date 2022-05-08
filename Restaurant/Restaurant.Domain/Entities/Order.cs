@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurant.Domain.ValueObjects;
+using System;
 
 namespace Restaurant.Domain.Entities
 {
@@ -6,8 +7,8 @@ namespace Restaurant.Domain.Entities
     {
         public string OrderNumber { get; set; }
         public DateTime Created { get; set; }
-        public long PriceBeforeDot { get; set; }
-        public long PriceAfterDot { get; set; }
+        public Price Price { get; set; }
         public string Email { get; set; }
+        public Product Product { get; set; }
     }
 }
