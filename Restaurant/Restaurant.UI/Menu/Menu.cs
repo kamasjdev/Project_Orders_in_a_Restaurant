@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Restaurant.UI.Components;
+using Restaurant.Infrastructure.Requests;
 
 namespace Restaurant.UI
 {
-
-
     public partial class Menu : UserControl
     {
         private Dictionary<string, double> products = new Dictionary<string, double>(); // kolekcja produktow (nazwa) i wartości (ceny)
         private List<Product> list_of_products = new List<Product>();     // lista produktów
         double amount_to_pay = 0.0;             // kwota do zapłaty
-
-        public Menu()
+        private readonly IRequestHandler _requestHandler;
+        
+        public Menu(IRequestHandler requestHandler)
         {
+            _requestHandler = requestHandler;
             InitializeComponent();
             // dodanie listy produktów do kolekcji
             products.Add("Pizza Margheritta", 20.0);

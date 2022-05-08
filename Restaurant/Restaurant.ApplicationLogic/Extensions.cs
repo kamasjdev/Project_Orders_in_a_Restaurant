@@ -1,4 +1,7 @@
-﻿using Castle.Windsor;
+﻿using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Restaurant.ApplicationLogic.Implementation;
+using Restaurant.ApplicationLogic.Interfaces;
 
 namespace Restaurant.ApplicationLogic
 {
@@ -6,6 +9,8 @@ namespace Restaurant.ApplicationLogic
     {
         public static IWindsorContainer AddApplicationLogic(this IWindsorContainer container)
         {
+            container.Register(Component.For<IProductService>().ImplementedBy<ProductService>().LifestyleTransient());
+            container.Register(Component.For<IOrderService>().ImplementedBy<OrderService>().LifestyleTransient());
             return container;
         }
     }

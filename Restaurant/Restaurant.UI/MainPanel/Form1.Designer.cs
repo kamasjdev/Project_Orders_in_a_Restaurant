@@ -1,4 +1,6 @@
-﻿namespace Restaurant.UI
+﻿using Restaurant.Infrastructure.Requests;
+
+namespace Restaurant.UI
 {
     partial class Form1
     {
@@ -38,9 +40,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.menu1 = new Restaurant.UI.Menu();
             this.settings1 = new Restaurant.UI.Settings();
-            this.history1 = new Restaurant.UI.History();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -50,12 +50,12 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Maroon;
+            this.panel1.Controls.Add(this.buttonMenu);
             this.panel1.Controls.Add(this.buttonCloseApp);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.buttonSettings);
             this.panel1.Controls.Add(this.buttonHistory);
-            this.panel1.Controls.Add(this.buttonMenu);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
@@ -166,38 +166,19 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.menu1);
             this.panel3.Controls.Add(this.settings1);
-            this.panel3.Controls.Add(this.history1);
             this.panel3.Location = new System.Drawing.Point(214, 68);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(841, 508);
             this.panel3.TabIndex = 2;
             // 
-            // menu1
-            // 
-            this.menu1.Location = new System.Drawing.Point(0, 0);
-            this.menu1.Margin = new System.Windows.Forms.Padding(4);
-            this.menu1.Name = "menu1";
-            this.menu1.Size = new System.Drawing.Size(841, 508);
-            this.menu1.TabIndex = 0;
-            this.menu1.Visible = false;
-            // 
             // settings1
             // 
-            this.settings1.Location = new System.Drawing.Point(4, 0);
+            this.settings1.Location = new System.Drawing.Point(-1, -3);
             this.settings1.Margin = new System.Windows.Forms.Padding(4);
             this.settings1.Name = "settings1";
             this.settings1.Size = new System.Drawing.Size(841, 507);
             this.settings1.TabIndex = 1;
-            // 
-            // history1
-            // 
-            this.history1.Location = new System.Drawing.Point(4, 0);
-            this.history1.Margin = new System.Windows.Forms.Padding(4);
-            this.history1.Name = "history1";
-            this.history1.Size = new System.Drawing.Size(833, 504);
-            this.history1.TabIndex = 3;
             // 
             // Form1
             // 

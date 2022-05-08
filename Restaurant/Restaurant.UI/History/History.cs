@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Restaurant.Infrastructure.Requests;
 
 namespace Restaurant.UI
 {
     public partial class History : UserControl
     {
         private ConnectionDB_LINQDataContext dc = new ConnectionDB_LINQDataContext();
-        public History()
+        private readonly IRequestHandler _requestHandler;
+
+        public History(IRequestHandler requestHandler)
         {
+            _requestHandler = requestHandler;
             InitializeComponent();
         }
 

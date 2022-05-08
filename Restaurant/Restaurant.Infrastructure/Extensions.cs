@@ -8,6 +8,7 @@ using Castle.MicroKernel.Lifestyle;
 using System.Data.SQLite;
 using Dapper;
 using System.Linq;
+using Restaurant.Infrastructure.Requests;
 
 namespace Restaurant.Infrastructure
 {
@@ -18,6 +19,11 @@ namespace Restaurant.Infrastructure
             container.Register(Component.For<IOrderRepository>().ImplementedBy<OrderRepository>().LifestyleScoped());
             container.Register(Component.For<IProductRepository>().ImplementedBy<ProductRepository>().LifestyleScoped());
             container.AddDbConnection(appSettings);
+            container.Register(Component.For<IRequestHandler>()
+                        .UsingFactoryMethod(factory =>
+                        {
+                            return new RequestHandler(container);
+                        }).LifestyleSingleton());
             return container;
         }
         
@@ -42,7 +48,7 @@ namespace Restaurant.Infrastructure
         private static void EnsureTablesAreCreated(IDbConnection connection)
         {
             connection.Open();
-            var result = connection.Query<string>("SELECT name FROM sqlite_master WHERE type=@Type AND name IN (@t1, @t2)", new { Type = "table", t1 = "products", t2 = "orders" }).ToList();
+            var result = connection.Query<string>("SELECT name FROM sqlite_master WHERE type=@Type AND name IN (@t1, @t2, @t3)", new { Type = "table", t1 = "products", t2 = "orders", t3 = "order_product" }).ToList();
 
             if (!result.Any())
             {
@@ -56,18 +62,24 @@ namespace Restaurant.Infrastructure
                                             );";
                 var createOrderTable = @"CREATE TABLE orders (
 	                                            Id TEXT NOT NULL,
-	                                            ProductId TEXT NOT NULL,
 	                                            OrderNumber TEXT NOT NULL,
 	                                            Created TEXT NOT NULL,
                                                 WholePart REAL NOT NULL,
                                                 FractionalPart REAL NOT NULL,
 	                                            Email TEXT NOT NULL,
-                                                CONSTRAINT FK_PRODUCTS FOREIGN KEY (ProductId) REFERENCES products,
                                                 PRIMARY KEY (Id)
+                                            );";
+                
+                var createOrderProductTable = @"CREATE TABLE order_product (
+	                                            ProductId TEXT,
+                                                OrderId TEXT,
+                                                CONSTRAINT FK_PRODUCTS FOREIGN KEY (ProductId) REFERENCES products,
+                                                CONSTRAINT FK_ORDERS FOREIGN KEY (OrderId) REFERENCES orders
                                             );";
 
                 connection.Execute(createProductTable);
                 connection.Execute(createOrderTable);
+                connection.Execute(createOrderProductTable);
             }
         }
     }

@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Windows.Forms;
+using Restaurant.Infrastructure.Requests;
 
 namespace Restaurant.UI
 {
     public partial class Form1 : Form
     {
-        public Form1()
+        private readonly IRequestHandler _requestHandler;
+
+        public Form1(IRequestHandler requestHandler, Menu menu, Settings settings, History history)
         {
+            _requestHandler = requestHandler;
+            menu1 = menu;
+            settings1 = settings;
+            history1 = history;
             InitializeComponent();
-            menu1.Visible = false;   // ustaw widoczność menu1 na false
-            settings1.Visible = true;  // ustaw widoczność settings1 na true
-            history1.Visible = false;    // ustaw widoczność history1 na false
-        }
+            panel3.Controls.Add(menu1);
+            panel3.Controls.Add(settings1);
+            panel3.Controls.Add(history1);
+    }
 
         private void ShowMenu(object sender, EventArgs e)           // funkcja wyświetlająca Menu
         {

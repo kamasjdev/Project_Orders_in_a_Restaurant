@@ -33,6 +33,12 @@ namespace Restaurant.Domain.ValueObjects
             return new Price(wholePart, fractionalPart);
         }
 
+        public decimal AsDecimal()
+        {
+            var price = decimal.Parse(ToString());
+            return price;
+        }
+
         public static Price operator +(Price price, Price other)
         {
             return new Price(price.WholePart + other.WholePart, price.FractionalPart + other.FractionalPart);
