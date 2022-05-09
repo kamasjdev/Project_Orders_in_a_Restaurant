@@ -9,6 +9,8 @@ using System.Data.SQLite;
 using Dapper;
 using System.Linq;
 using Restaurant.Infrastructure.Requests;
+using Restaurant.Infrastructure.Migrations;
+using Restaurant.Infrastructure.Mappings;
 
 namespace Restaurant.Infrastructure
 {
@@ -24,6 +26,7 @@ namespace Restaurant.Infrastructure
                         {
                             return new RequestHandler(container);
                         }).LifestyleSingleton());
+            container.ApplyMappings();
             return container;
         }
         
@@ -42,6 +45,7 @@ namespace Restaurant.Infrastructure
             {
                 var connection = container.Resolve<IDbConnection>();
                 EnsureTablesAreCreated(connection);
+                SeedData.AddData(connection);
             }
         }
 
@@ -76,11 +80,20 @@ namespace Restaurant.Infrastructure
                                                 CONSTRAINT FK_PRODUCTS FOREIGN KEY (ProductId) REFERENCES products,
                                                 CONSTRAINT FK_ORDERS FOREIGN KEY (OrderId) REFERENCES orders
                                             );";
+                
+                var createMigrationTable = @"CREATE TABLE migrations (
+	                                            Id TEXT,
+                                                Name TEXT,
+                                                Version INTEGER NOT NULL
+                                            );";
 
                 connection.Execute(createProductTable);
                 connection.Execute(createOrderTable);
                 connection.Execute(createOrderProductTable);
+                connection.Execute(createMigrationTable);
             }
+
+            connection.Close();
         }
     }
 }

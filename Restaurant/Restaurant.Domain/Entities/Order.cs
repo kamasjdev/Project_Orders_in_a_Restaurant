@@ -1,5 +1,6 @@
 ﻿using Restaurant.Domain.ValueObjects;
 using System;
+using System.Collections.Generic;
 
 namespace Restaurant.Domain.Entities
 {
@@ -9,6 +10,6 @@ namespace Restaurant.Domain.Entities
         public DateTime Created { get; set; }
         public Price Price { get; set; }
         public string Email { get; set; }
-        public Product Product { get; set; }
+        public ISet<Product> Product { get; set; }
     }
 }
