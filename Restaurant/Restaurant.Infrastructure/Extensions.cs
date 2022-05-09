@@ -59,17 +59,14 @@ namespace Restaurant.Infrastructure
                 var createProductTable = @"CREATE TABLE products (
                                                 Id TEXT NOT NULL,
 	                                            ProductName TEXT NOT NULL,
-	                                            Created TEXT NOT NULL,
-                                                WholePart REAL NOT NULL,
-                                                FractionalPart REAL NOT NULL,
+                                                Price REAL NOT NULL,
                                                 PRIMARY KEY (Id)
                                             );";
                 var createOrderTable = @"CREATE TABLE orders (
 	                                            Id TEXT NOT NULL,
 	                                            OrderNumber TEXT NOT NULL,
 	                                            Created TEXT NOT NULL,
-                                                WholePart REAL NOT NULL,
-                                                FractionalPart REAL NOT NULL,
+                                                Price REAL NOT NULL,
 	                                            Email TEXT NOT NULL,
                                                 PRIMARY KEY (Id)
                                             );";

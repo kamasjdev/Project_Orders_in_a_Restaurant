@@ -15,8 +15,8 @@ namespace Restaurant.Infrastructure.Migrations
 
             if (result is null)
             {
-                dbConnection.Execute("INSERT INTO products (Id, ProductName, Created, WholePart, FractionalPart) VALUES (@Id, @ProductName, @Created, @WholePart, @FractionalPart)",
-                            new { Id = Guid.NewGuid(), ProductName = "Pizza", Created = DateTime.UtcNow, WholePart = 100, FractionalPart = 50 });
+                dbConnection.Execute("INSERT INTO products (Id, ProductName, Price) VALUES (@Id, @ProductName, @Price)",
+                            new { Id = Guid.NewGuid(), ProductName = "Pizza", Price = 100.50M });
                 dbConnection.Execute("INSERT INTO migrations (Id, Name, Version) VALUES (@Id, @Name, @Version)",
                             new { Id = Guid.NewGuid(), Name = $"First_Migration_{DateTime.UtcNow.ToString("s", CultureInfo.GetCultureInfo("en-US"))}", Version = result?.Version + 1 ?? 1 });
             }

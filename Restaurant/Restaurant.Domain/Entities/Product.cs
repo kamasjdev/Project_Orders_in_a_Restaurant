@@ -6,8 +6,13 @@ namespace Restaurant.Domain.Entities
 {
     public class Product : BaseEntity<Guid>
     {
+        public Product()
+        {
+            Orders = new HashSet<Order>();
+        }
+
         public string ProductName { get; set; }
-        public Price Price { get; set; }
+        public decimal Price { get; set; }
         public ISet<Order> Orders { get; set; }
     }
 }

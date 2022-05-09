@@ -12,7 +12,7 @@ namespace Restaurant.Domain.ValueObjects
         public long WholePart { get; }
         public long FractionalPart { get; }
 
-        private Price(long wholePart, long fractionalPart)
+        public Price(long wholePart, long fractionalPart)
         {
             WholePart = wholePart;
             FractionalPart = fractionalPart;

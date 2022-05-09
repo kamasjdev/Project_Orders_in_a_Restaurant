@@ -9,7 +9,7 @@ namespace Restaurant.Domain.Repositories
     {
         I Add(T entity);
         void Update(T entity);
-        void Delete(T entity);
+        void Delete(I id);
         T Get(I id);
         ICollection<T> GetAll();
     }
