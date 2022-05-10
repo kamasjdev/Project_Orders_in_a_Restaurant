@@ -49,7 +49,7 @@ namespace Restaurant.Infrastructure.Repositories
                 .Select(group =>
                 {
                     var combinedOwner = group.First();
-                    combinedOwner.Orders = new HashSet<Order>(group.Select(owner => owner.Orders.Single()).ToList());
+                    combinedOwner.AddOrders(group.Select(owner => owner.Orders.Single()));
                     return combinedOwner;
                 });
             return result.SingleOrDefault();

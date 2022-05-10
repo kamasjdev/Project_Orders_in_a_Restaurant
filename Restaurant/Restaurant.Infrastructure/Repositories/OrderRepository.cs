@@ -50,7 +50,7 @@ namespace Restaurant.Infrastructure.Repositories
                 .Select(group =>
                 {
                     var combinedOwner = group.First();
-                    combinedOwner.Products = new HashSet<Product>(group.Select(owner => owner.Products.Single()).ToList());
+                    combinedOwner.AddProducts(group.Select(owner => owner.Products.Single()));
                     return combinedOwner;
                 });
             return result.SingleOrDefault();

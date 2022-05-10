@@ -8,13 +8,7 @@ namespace Restaurant.ApplicationLogic.Mappings
     {
         public static Product AsEntity(this ProductDto productDto)
         {
-            var product = new Product()
-            {
-                Id = productDto.Id,
-                Price = productDto.Price,
-                ProductName = productDto.ProductName
-            };
-
+            var product = new Product(productDto.Id, productDto.ProductName, productDto.Price);
             return product;
         }
 
@@ -45,15 +39,7 @@ namespace Restaurant.ApplicationLogic.Mappings
 
         public static Order AsEntity(this OrderDto orderDto)
         {
-            var order = new Order()
-            {
-                Id = orderDto.Id,
-                Email = orderDto.Email,
-                Price = orderDto.Price,
-                OrderNumber = orderDto.OrderNumber,
-                Created = orderDto.Created
-            };
-
+            var order = new Order(orderDto.Id, orderDto.Email, orderDto.Created, orderDto.Price, orderDto.OrderNumber);
             return order;
         }
 
