@@ -11,11 +11,12 @@ namespace Restaurant.Domain.Entities
             Orders = new List<Order>();
         }
 
-        public Product(Guid id, string productName, decimal price)
+        public Product(Guid id, string productName, decimal price, IList<Order> orders = null)
         {
             Id = id;
             ChangeProductName(productName);
             ChangePrice(price);
+            Orders = orders ?? new List<Order>();
         }
 
         public string ProductName { get; private set; }
@@ -52,11 +53,6 @@ namespace Restaurant.Domain.Entities
             if (orders is null)
             {
                 throw new InvalidOperationException("Cannot add empty orders");
-            }
-
-            if (orders.Count() == 0)
-            {
-                return;
             }
 
             foreach (var order in orders)
