@@ -18,19 +18,11 @@ namespace Restaurant.UI
         [STAThread]
         static void Main()
         {
-            var container = new WindsorContainer();
+            var container = SetupApplication.Create();
             container.Register(Castle.MicroKernel.Registration.Component.For<Form1>().LifestyleSingleton());
             container.Register(Castle.MicroKernel.Registration.Component.For<Menu>().LifestyleSingleton());
             container.Register(Castle.MicroKernel.Registration.Component.For<Settings>().LifestyleSingleton());
             container.Register(Castle.MicroKernel.Registration.Component.For<History>().LifestyleSingleton());
-            container.AddApplicationLogic();
-            var connectionStrings = new NameValueCollection();
-            foreach (ConnectionStringSettings connectionStringSettings in ConfigurationManager.ConnectionStrings)
-            {
-                connectionStrings.Add(connectionStringSettings.Name, connectionStringSettings.ConnectionString);
-            }
-            container.AddInfrastructure(connectionStrings);
-            container.UseInfrastructure();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(container.Resolve<Form1>());

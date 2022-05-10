@@ -145,6 +145,7 @@
     </Compile>
     <Compile Include="Settings\User.cs" />
     <Compile Include="Menu\Order.cs" />
+    <Compile Include="SetupApplication.cs" />
     <EmbeddedResource Include="MainPanel\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
