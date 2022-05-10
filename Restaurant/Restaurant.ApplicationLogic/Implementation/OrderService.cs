@@ -1,35 +1,49 @@
 ﻿using Restaurant.ApplicationLogic.DTO;
 using Restaurant.ApplicationLogic.Interfaces;
+using Restaurant.ApplicationLogic.Mappings;
+using Restaurant.Domain.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Restaurant.ApplicationLogic.Implementation
 {
     internal class OrderService : IOrderService
     {
+        private readonly IOrderRepository _orderRepository;
+
+        public OrderService(IOrderRepository orderRepository)
+        {
+            _orderRepository = orderRepository;
+        }
+
         public Guid Add(OrderDto order)
         {
-            throw new NotImplementedException();
+            order.Id = Guid.NewGuid();
+            var id = _orderRepository.Add(order.AsEntity());
+            return id;
         }
 
-        public void Delete(OrderDto order)
+        public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            _orderRepository.Delete(id);
         }
 
-        public OrderDto Get(Guid id)
+        public OrderDetailsDto Get(Guid id)
         {
-            throw new NotImplementedException();
+            var order = _orderRepository.Get(id);
+            return order.AsDetailsDto();
         }
 
         public IEnumerable<OrderDto> GetAll()
         {
-            throw new NotImplementedException();
+            var orders = _orderRepository.GetAll();
+            return orders.Select(o => o.AsDto());
         }
 
         public void Update(OrderDto order)
         {
-            throw new NotImplementedException();
+            _orderRepository.Update(order.AsEntity());
         }
     }
 }

@@ -6,10 +6,10 @@ namespace Restaurant.ApplicationLogic.Interfaces
 {
     public interface IOrderService
     {
-        OrderDto Get(Guid id);
+        OrderDetailsDto Get(Guid id);
         IEnumerable<OrderDto> GetAll();
         Guid Add(OrderDto order);
         void Update(OrderDto order);
-        void Delete(OrderDto order);
+        void Delete(Guid id);
     }
 }

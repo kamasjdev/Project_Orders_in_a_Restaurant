@@ -2,34 +2,48 @@
 using Restaurant.ApplicationLogic.DTO;
 using System;
 using System.Collections.Generic;
+using Restaurant.Domain.Repositories;
+using System.Linq;
+using Restaurant.ApplicationLogic.Mappings;
 
 namespace Restaurant.ApplicationLogic.Implementation
 {
     internal class ProductService : IProductService
     {
+        private readonly IProductRepository _productRepository;
+
+        public ProductService(IProductRepository productRepository)
+        {
+            _productRepository = productRepository;
+        }
+
         public Guid Add(ProductDto product)
         {
-            throw new NotImplementedException();
+            product.Id = Guid.NewGuid();
+            var id = _productRepository.Add(product.AsEntity());
+            return id;
         }
 
-        public void Delete(ProductDto product)
+        public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            _productRepository.Delete(id);
         }
 
-        public ProductDto Get(Guid id)
+        public ProductDetailsDto Get(Guid id)
         {
-            return new ProductDto();
+            var product = _productRepository.Get(id);
+            return product.AsDetailsDto();
         }
 
         public IEnumerable<ProductDto> GetAll()
         {
-            throw new NotImplementedException();
+            var products = _productRepository.GetAll();
+            return products.Select(p => p.AsDto());
         }
 
         public void Update(ProductDto product)
         {
-            throw new NotImplementedException();
+            _productRepository.Update(product.AsEntity());
         }
     }
 }
