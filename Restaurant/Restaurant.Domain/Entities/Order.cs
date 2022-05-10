@@ -74,11 +74,6 @@ namespace Restaurant.Domain.Entities
                 throw new InvalidOperationException("Cannot add empty products");
             }
 
-            if (products.Count() == 0)
-            {
-                return;
-            }
-
             foreach (var product in products)
             {
                 Products.Add(product);
