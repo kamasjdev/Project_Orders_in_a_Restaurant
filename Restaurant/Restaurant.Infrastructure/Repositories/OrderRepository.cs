@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.Domain.Entities;
 using Restaurant.Domain.Repositories;
 using System;
@@ -12,26 +13,22 @@ namespace Restaurant.Infrastructure.Repositories
     {
         private readonly IDbConnection _dbConnection;
 
-        public OrderRepository(IDbConnection dbConnection)
+        public OrderRepository(IUnitOfWork unitOfWork)
         {
-            _dbConnection = dbConnection;
+            _dbConnection = unitOfWork.Connection;
         }
 
         public Guid Add(Order entity)
         {
-            _dbConnection.Open();
             var sql = "INSERT INTO orders (Id, OrderNumber, Created, Price, Email) VALUES (@Id, @OrderNumber, @Created, @Price, @Email)";
             _dbConnection.Execute(sql, entity);
-            _dbConnection.Close();
             return entity.Id;
         }
 
         public void Delete(Guid id)
         {
             var sql = "DELETE FROM orders WHERE Id = @Id";
-            _dbConnection.Open();
             _dbConnection.Execute(sql, new { Id = id });
-            _dbConnection.Close();
         }
 
         public Order Get(Guid id)
@@ -56,25 +53,20 @@ namespace Restaurant.Infrastructure.Repositories
                     combinedOwner.Products = new HashSet<Product>(group.Select(owner => owner.Products.Single()).ToList());
                     return combinedOwner;
                 });
-            _dbConnection.Close();
             return result.SingleOrDefault();
         }
 
         public ICollection<Order> GetAll()
         {
             var sql = "SELECT * FROM orders";
-            _dbConnection.Open();
             var result = _dbConnection.Query<Order>(sql);
-            _dbConnection.Close();
             return result.ToList();
         }
 
         public void Update(Order entity)
         {
-            _dbConnection.Open();
             var sql = "UPDATE orders SET OrderNumber = @OrderNumber, Created = @Created, Price = @Price, Email = @Email WHERE Id = @Id";
             _dbConnection.Execute(sql, entity);
-            _dbConnection.Close();
         }
     }
 }

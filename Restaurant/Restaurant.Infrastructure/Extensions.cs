@@ -11,6 +11,8 @@ using System.Linq;
 using Restaurant.Infrastructure.Requests;
 using Restaurant.Infrastructure.Migrations;
 using Restaurant.Infrastructure.Mappings;
+using Restaurant.ApplicationLogic.Interfaces;
+using Restaurant.Infrastructure.DAL;
 
 namespace Restaurant.Infrastructure
 {
@@ -27,6 +29,7 @@ namespace Restaurant.Infrastructure
                             return new RequestHandler(container);
                         }).LifestyleSingleton());
             container.ApplyMappings();
+            container.Register(Component.For<IUnitOfWork>().ImplementedBy<UnitOfWork>().LifestyleScoped());
             return container;
         }
         
@@ -34,7 +37,11 @@ namespace Restaurant.Infrastructure
         {
             var connectionString = appSettings["RestaurantDb"];
             container.Register(Component.For<IDbConnection>()
-                        .UsingFactoryMethod(kernel => new SQLiteConnection(connectionString))
+                        .UsingFactoryMethod(kernel => {
+                                var connection = new SQLiteConnection(connectionString);
+                                connection.Open();
+                                return connection;
+                            })
                         .LifestyleScoped());
             return container;
         }
@@ -51,7 +58,6 @@ namespace Restaurant.Infrastructure
 
         private static void EnsureTablesAreCreated(IDbConnection connection)
         {
-            connection.Open();
             var result = connection.Query<string>("SELECT name FROM sqlite_master WHERE type=@Type AND name IN (@t1, @t2, @t3)", new { Type = "table", t1 = "products", t2 = "orders", t3 = "order_product" }).ToList();
 
             if (!result.Any())
@@ -89,8 +95,6 @@ namespace Restaurant.Infrastructure
                 connection.Execute(createOrderProductTable);
                 connection.Execute(createMigrationTable);
             }
-
-            connection.Close();
         }
     }
 }

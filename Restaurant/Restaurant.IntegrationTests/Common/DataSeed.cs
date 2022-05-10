@@ -14,7 +14,6 @@ namespace Restaurant.IntegrationTests.Common
             using (var scope = windsorContainer.BeginScope())
             {
                 var dbConnection = windsorContainer.Resolve<IDbConnection>();
-                dbConnection.Open();
 
                 dbConnection.Execute("INSERT INTO products (Id, ProductName, Price) VALUES(@Id, @ProductName, @Price)",
                     new
@@ -71,8 +70,6 @@ namespace Restaurant.IntegrationTests.Common
                 dbConnection.Execute(@"INSERT INTO order_product (ProductId, OrderId) 
                                    VALUES(@ProductId, @OrderId)",
                                        new { ProductId = new Guid("b9302f85-9fcc-446f-9dd3-f8510fc864b9"), OrderId = new Guid("b9302f85-9fcc-446f-9dd3-f8510fc864b9") });
-
-                dbConnection.Close();
             }
         }
     }

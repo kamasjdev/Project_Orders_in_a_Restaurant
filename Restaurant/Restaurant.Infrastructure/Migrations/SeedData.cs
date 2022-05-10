@@ -10,7 +10,6 @@ namespace Restaurant.Infrastructure.Migrations
     {
         public static void AddData(IDbConnection dbConnection)
         {
-            dbConnection.Open();
             var result = dbConnection.Query<Migration>("SELECT Id, Name, Version FROM migrations WHERE 1=1 ORDER BY Version DESC LIMIT 1").SingleOrDefault();
 
             if (result is null)
@@ -20,8 +19,6 @@ namespace Restaurant.Infrastructure.Migrations
                 dbConnection.Execute("INSERT INTO migrations (Id, Name, Version) VALUES (@Id, @Name, @Version)",
                             new { Id = Guid.NewGuid(), Name = $"First_Migration_{DateTime.UtcNow.ToString("s", CultureInfo.GetCultureInfo("en-US"))}", Version = result?.Version + 1 ?? 1 });
             }
-
-            dbConnection.Close();
         }
     }
 }
