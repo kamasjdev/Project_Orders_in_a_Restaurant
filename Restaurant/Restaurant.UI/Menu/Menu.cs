@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Restaurant.UI.Components;
 using Restaurant.Infrastructure.Requests;
+using Restaurant.ApplicationLogic.Interfaces;
+using Restaurant.ApplicationLogic.DTO;
+using System.Linq;
 
 namespace Restaurant.UI
 {
@@ -30,9 +33,7 @@ namespace Restaurant.UI
             products.Add("Kawa", 5.0);
             products.Add("Herbata", 5.0);
             products.Add("Cola", 5.0);
-            labelCostOfOrder.Text = "Koszt: " + amount_to_pay.ToString() + "zł";
         }
-
 
         private void ChangedItem(object sender, EventArgs e) // funkcja wywołuje się gdy zostanie zmieniona wartość w głównych daniach daniach (comboBoxMainDishes1)
         {
@@ -183,6 +184,14 @@ namespace Restaurant.UI
                                    MessageBoxButtons.OK,
                                   MessageBoxIcon.Information);
             }
+        }
+
+        private void OnLoad(object sender, EventArgs e)
+        {
+            labelCostOfOrder.Text = amount_to_pay > 0 ? "Koszt: " + amount_to_pay + "zł" : "";
+            var products = _requestHandler.Send<IProductService, IEnumerable<ProductDto>>(s => s.GetAll());
+            comboBoxMainDishes1.Items.Clear();
+            comboBoxMainDishes1.Items.AddRange(products.Select(p => p.ProductName).ToArray());
         }
     }
 }

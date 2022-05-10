@@ -2,7 +2,7 @@
 
 namespace Restaurant.UI
 {
-    partial class Form1
+    partial class MainPanel
     {
         /// <summary>
         /// Wymagana zmienna projektanta.

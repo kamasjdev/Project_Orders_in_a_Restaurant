@@ -116,11 +116,11 @@
       <DependentUpon>ConnectionDB_LINQ.dbml</DependentUpon>
     </Compile>
     <Compile Include="Decorator\ProductDecorator.cs" />
-    <Compile Include="MainPanel\Form1.cs">
+    <Compile Include="MainPanel\MainPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainPanel\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MainPanel\MainPanel.Designer.cs">
+      <DependentUpon>MainPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="History\History.cs">
       <SubType>UserControl</SubType>
@@ -146,8 +146,8 @@
     <Compile Include="Settings\User.cs" />
     <Compile Include="Menu\Order.cs" />
     <Compile Include="SetupApplication.cs" />
-    <EmbeddedResource Include="MainPanel\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="MainPanel\MainPanel.resx">
+      <DependentUpon>MainPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="History\History.resx">
       <DependentUpon>History.cs</DependentUpon>

@@ -183,6 +183,7 @@
             this.Controls.Add(this.comboBoxMainDishes1);
             this.Name = "Menu";
             this.Size = new System.Drawing.Size(642, 385);
+            this.Load += new System.EventHandler(this.OnLoad);
             this.VisibleChanged += new System.EventHandler(this.LoadLeftMenu);
             this.ResumeLayout(false);
             this.PerformLayout();

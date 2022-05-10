@@ -1,4 +1,5 @@
-﻿using Castle.Windsor;
+﻿using Castle.MicroKernel.Lifestyle;
+using Castle.Windsor;
 using Restaurant.ApplicationLogic.Interfaces;
 using System;
 
@@ -16,15 +17,21 @@ namespace Restaurant.Infrastructure.Requests
         public TResponse Send<TService, TResponse>(Func<TService, TResponse> action)
              where TService : class, IService
         {
-            var service = _container.Resolve<TService>();
-            return action.Invoke(service);
+            using (var scope = _container.BeginScope())
+            {
+                var service = _container.Resolve<TService>();
+                return action.Invoke(service);
+            }
         }
 
         public void Send<TService>(Action<TService> action)
              where TService : class, IService
         {
-            var service = _container.Resolve<TService>();
-            action(service);
+            using (var scope = _container.BeginScope())
+            {
+                var service = _container.Resolve<TService>();
+                action(service);
+            }
         }
     }
 }
