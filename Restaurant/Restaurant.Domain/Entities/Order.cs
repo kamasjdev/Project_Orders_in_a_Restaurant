@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Restaurant.Domain.Entities
@@ -34,7 +35,7 @@ namespace Restaurant.Domain.Entities
         public DateTime Created { get; }
         public decimal Price { get; private set; }
         public string Email { get; private set; }
-        public string Note { get; set; }
+        public string Note { get; set; } = null;
 
         public IEnumerable<ProductSale> Products => _products;
         private IList<ProductSale> _products;
@@ -88,7 +89,7 @@ namespace Restaurant.Domain.Entities
 
             foreach (var product in products)
             {
-                _products.Add(product);
+                AddProduct(product);
             }
         }
 
@@ -99,7 +100,33 @@ namespace Restaurant.Domain.Entities
                 throw new InvalidOperationException("Cannot add null product");
             }
 
+            var productToAdd = _products.Where(p => p.Id == product.Id).SingleOrDefault();
+
+            if (productToAdd != null)
+            {
+                throw new InvalidOperationException($"Product with id '{productToAdd.Id}' exists");
+            }
+
             _products.Add(product);
+            product.AddOrder(this);
+        }
+
+        public void RemoveProduct(ProductSale product)
+        {
+            if (product is null)
+            {
+                throw new InvalidOperationException("Cannot remove null product");
+            }
+
+            var productToDelete = _products.Where(p => p.Id == product.Id).SingleOrDefault();
+
+            if (productToDelete is null)
+            {
+                throw new InvalidOperationException($"Product with id '{productToDelete.Id}' not found");
+            }
+
+            _products.Remove(product);
+            product.RemoveOrder();
         }
     }
 }

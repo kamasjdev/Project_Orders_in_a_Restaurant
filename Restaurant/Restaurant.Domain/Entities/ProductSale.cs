@@ -8,7 +8,7 @@ namespace Restaurant.Domain.Entities
         {
         }
 
-        public ProductSale(Guid id, Product product, Addition addition = null)
+        public ProductSale(Guid id, Product product, ProductSaleState productSaleState, Addition addition = null, Guid? orderId = null, Order order = null)
             : base(id)
         {
             ChangeProduct(product);
@@ -17,11 +17,18 @@ namespace Restaurant.Domain.Entities
             {
                 ChangeAddition(addition);
             }
+
+            OrderId = orderId;
+            Order = order;
+            ProductSaleState = productSaleState;
         }
 
         public Product Product { get; private set; }
         public Addition Addition { get; private set; } = null;
         public decimal EndPrice { get; private set; } = decimal.Zero;
+        public Guid? OrderId { get; private set; }
+        public Order Order { get; private set; } = null;
+        public ProductSaleState ProductSaleState { get; private set; } = ProductSaleState.New;
 
         public void ChangeProduct(Product product)
         {
@@ -64,6 +71,35 @@ namespace Restaurant.Domain.Entities
 
             EndPrice -= Addition.Price;
             Addition = null;
+        }
+
+        public void AddOrder(Order order)
+        {
+            if (order is null)
+            {
+                throw new InvalidOperationException("Cannot assign null order");
+            }
+
+            if (Order != null)
+            {
+                throw new InvalidOperationException("Cannot override existing order");
+            }
+
+            Order = order;
+            OrderId = order.Id;
+            ProductSaleState = ProductSaleState.Ordered;
+        }
+
+        public void RemoveOrder()
+        {
+            if (Order is null)
+            {
+                throw new InvalidOperationException("Cannot remove product, because there is no ordered");
+            }
+
+            Order = null;
+            OrderId = null;
+            ProductSaleState = ProductSaleState.New;
         }
     }
 }

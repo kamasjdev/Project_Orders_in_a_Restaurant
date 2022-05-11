@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Restaurant.Domain.Entities
 {
@@ -69,6 +70,13 @@ namespace Restaurant.Domain.Entities
             if (order is null)
             {
                 throw new InvalidOperationException("Cannot add null order");
+            }
+
+            var orderToAdd = _orders.Where(p => p.Id == order.Id).SingleOrDefault();
+
+            if (orderToAdd != null)
+            {
+                throw new InvalidOperationException($"Order with id '{orderToAdd.Id}' exists");
             }
 
             _orders.Add(order);
