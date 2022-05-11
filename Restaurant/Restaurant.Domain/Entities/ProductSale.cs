@@ -23,7 +23,9 @@ namespace Restaurant.Domain.Entities
             ProductSaleState = productSaleState;
         }
 
+        public Guid ProductId { get; private set; }
         public Product Product { get; private set; }
+        public Guid? AdditionId { get; private set; } = null;
         public Addition Addition { get; private set; } = null;
         public decimal EndPrice { get; private set; } = decimal.Zero;
         public Guid? OrderId { get; private set; }
@@ -43,6 +45,7 @@ namespace Restaurant.Domain.Entities
             }
 
             Product = product;
+            ProductId = product.Id;
             EndPrice += product.Price;
         }
 
@@ -59,10 +62,11 @@ namespace Restaurant.Domain.Entities
             }
 
             Addition = addition;
+            AdditionId = addition.Id;
             EndPrice += addition.Price;
         }
 
-        public void RemoveAddion()
+        public void RemoveAddition()
         {
             if (Addition is null)
             {
@@ -71,6 +75,7 @@ namespace Restaurant.Domain.Entities
 
             EndPrice -= Addition.Price;
             Addition = null;
+            AdditionId = null;
         }
 
         public void AddOrder(Order order)

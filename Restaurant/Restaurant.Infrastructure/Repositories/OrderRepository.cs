@@ -34,14 +34,15 @@ namespace Restaurant.Infrastructure.Repositories
         public Order Get(Guid id)
         {
             var sql = @"SELECT * FROM orders o
-                        LEFT JOIN order_product op ON op.OrderId = o.Id
-                        LEFT JOIN products p ON p.Id = op.ProductId
+                        LEFT JOIN product_sales ps ON ps.OrderId = o.Id
+                        LEFT JOIN additions a on ps.AdditionId = a.Id
+                        LEFT JOIN products p ON p.Id = ps.ProductId
                         WHERE o.Id = @Id";
-            var result = _dbConnection.Query<Order, Product, Order>(sql,
-                (order, product) => {
-                    if (order?.Id != Guid.Empty)
+            var result = _dbConnection.Query<Order, ProductSale, Addition, Product, Order>(sql,
+                (order, productSale, addition, product) => {
+                    if (productSale?.Id != Guid.Empty)
                     {
-                        order.Products.Add(product);
+                        order.AddProduct(productSale);
                     }
                     return order;
                 },

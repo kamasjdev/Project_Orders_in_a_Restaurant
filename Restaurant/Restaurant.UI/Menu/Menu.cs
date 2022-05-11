@@ -190,7 +190,7 @@ namespace Restaurant.UI
         {
             labelCostOfOrder.Text = amount_to_pay > 0 ? "Koszt: " + amount_to_pay + "zł" : "";
             var products = _requestHandler.Send<IProductService, IEnumerable<ProductDto>>(s => s.GetAll());
-            comboBoxMainDishes1.Items.Clear();
+            //comboBoxMainDishes1.Items.Clear();
             comboBoxMainDishes1.Items.AddRange(products.Select(p => p.ProductName).ToArray());
         }
     }
