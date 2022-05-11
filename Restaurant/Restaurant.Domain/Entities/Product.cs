@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Restaurant.Domain.Entities
 {
@@ -8,20 +7,24 @@ namespace Restaurant.Domain.Entities
     {
         private Product()
         {
-            Orders = new List<Order>();
+            _orders = new List<Order>();
         }
 
-        public Product(Guid id, string productName, decimal price, IList<Order> orders = null)
+        public Product(Guid id, string productName, decimal price, ProductKind productKind, IList<Order> orders = null)
+            : base(id)
         {
-            Id = id;
             ChangeProductName(productName);
             ChangePrice(price);
-            Orders = orders ?? new List<Order>();
+            _orders = orders ?? new List<Order>();
+            ProductKind = productKind;
         }
 
         public string ProductName { get; private set; }
         public decimal Price { get; private set; }
-        public IList<Order> Orders { get; private set; }
+        public ProductKind ProductKind { get; set; }
+
+        public IEnumerable<Order> Orders => _orders;
+        private IList<Order> _orders;
 
         public void ChangePrice(decimal price)
         {
@@ -57,8 +60,18 @@ namespace Restaurant.Domain.Entities
 
             foreach (var order in orders)
             {
-                Orders.Add(order);
+                _orders.Add(order);
             }
+        }
+
+        public void AddOrder(Order order)
+        {
+            if (order is null)
+            {
+                throw new InvalidOperationException("Cannot add null order");
+            }
+
+            _orders.Add(order);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Restaurant.Domain.Entities
@@ -9,23 +8,36 @@ namespace Restaurant.Domain.Entities
     {
         public const string EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
-        private Order() { Products = new List<Product>(); }
+        private Order() { _products = new List<ProductSale>(); }
 
-        public Order(Guid id, string orderNumber, DateTime created, decimal price, string email, IList<Product> products = null)
+        public Order(Guid id, string orderNumber, DateTime created, decimal price, string email, string note = null, IEnumerable<ProductSale> products = null) 
+            : base(id)
         {
-            Id = id;
             ChangeOrderNumber(orderNumber);
             Created = created;
             ChangePrice(price);
             ChangeEmail(email);
-            Products = products ?? new List<Product>();
+
+            if (products != null)
+            {
+                AddProducts(products);
+            }
+            else
+            {
+                _products = new List<ProductSale>();
+            }
+            
+            Note = note;
         }
 
         public string OrderNumber { get; private set; }
         public DateTime Created { get; }
         public decimal Price { get; private set; }
         public string Email { get; private set; }
-        public IList<Product> Products { get; }
+        public string Note { get; set; }
+
+        public IEnumerable<ProductSale> Products => _products;
+        private IList<ProductSale> _products;
 
         public void ChangeOrderNumber(string orderNumber)
         {
@@ -67,7 +79,7 @@ namespace Restaurant.Domain.Entities
             Email = email;
         }
 
-        public void AddProducts(IEnumerable<Product> products)
+        public void AddProducts(IEnumerable<ProductSale> products)
         {
             if (products is null)
             {
@@ -76,9 +88,18 @@ namespace Restaurant.Domain.Entities
 
             foreach (var product in products)
             {
-                Products.Add(product);
+                _products.Add(product);
             }
         }
 
+        public void AddProduct(ProductSale product)
+        {
+            if (product is null)
+            {
+                throw new InvalidOperationException("Cannot add null product");
+            }
+
+            _products.Add(product);
+        }
     }
 }

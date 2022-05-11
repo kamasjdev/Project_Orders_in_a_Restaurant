@@ -1,7 +1,16 @@
-﻿namespace Restaurant.Domain.Entities
+﻿using System;
+
+namespace Restaurant.Domain.Entities
 {
     public class BaseEntity<T> where T : struct
     {
-        public T Id { get; protected set; }
+        protected BaseEntity() { }
+
+        public BaseEntity(T id)
+        {
+            Id = id;
+        }
+
+        public T Id { get; }
     }
 }
