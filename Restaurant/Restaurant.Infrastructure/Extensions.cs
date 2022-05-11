@@ -66,6 +66,7 @@ namespace Restaurant.Infrastructure
                                                 Id TEXT NOT NULL,
 	                                            ProductName TEXT NOT NULL,
                                                 Price REAL NOT NULL,
+                                                ProductKind INTEGER NOT NULL,
                                                 PRIMARY KEY (Id)
                                             );";
                 var createOrderTable = @"CREATE TABLE orders (
@@ -74,14 +75,27 @@ namespace Restaurant.Infrastructure
 	                                            Created TEXT NOT NULL,
                                                 Price REAL NOT NULL,
 	                                            Email TEXT NOT NULL,
+                                                Note TEXT,
+                                                PRIMARY KEY (Id)
+                                            );";
+
+                var createAdditionTable = @"CREATE TABLE additions (
+	                                            Id TEXT NOT NULL,
+	                                            AdditionName TEXT NOT NULL,
+                                                Price REAL NOT NULL,
                                                 PRIMARY KEY (Id)
                                             );";
                 
-                var createOrderProductTable = @"CREATE TABLE order_product (
-	                                            ProductId TEXT,
+                var createProductSaleTable = @"CREATE TABLE product_sales (
+	                                            Id TEXT NOT NULL,
+	                                            ProductId TEXT NOT NULL,
                                                 OrderId TEXT,
+                                                AdditionId TEXT,
+                                                EndPrice REAL NOT NULL,
+                                                ProductSaleState INTEGER NOT NULL,
                                                 CONSTRAINT FK_PRODUCTS FOREIGN KEY (ProductId) REFERENCES products,
-                                                CONSTRAINT FK_ORDERS FOREIGN KEY (OrderId) REFERENCES orders
+                                                CONSTRAINT FK_ORDERS FOREIGN KEY (OrderId) REFERENCES orders,
+                                                CONSTRAINT FK_ADDITIONS FOREIGN KEY (AdditionId) REFERENCES additions
                                             );";
                 
                 var createMigrationTable = @"CREATE TABLE migrations (
@@ -92,7 +106,8 @@ namespace Restaurant.Infrastructure
 
                 connection.Execute(createProductTable);
                 connection.Execute(createOrderTable);
-                connection.Execute(createOrderProductTable);
+                connection.Execute(createAdditionTable);
+                connection.Execute(createProductSaleTable);
                 connection.Execute(createMigrationTable);
             }
         }

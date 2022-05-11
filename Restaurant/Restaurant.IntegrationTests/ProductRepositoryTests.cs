@@ -19,7 +19,7 @@ namespace Restaurant.IntegrationTests
         [Test]
         public void given_valid_product_should_add_to_db()
         {
-            var product = new Product(id: Guid.NewGuid(), price: 105.50M, productName: "Product #105");
+            var product = new Product(id: Guid.NewGuid(), price: 105.50M, productName: "Product #105", productKind: ProductKind.Pizza);
             
             repository.Add(product);
 
@@ -31,7 +31,7 @@ namespace Restaurant.IntegrationTests
         [Test]
         public void given_valid_id_should_delete_product()
         {
-            var product = new Product(id: Guid.NewGuid(), price: 105.50M, productName: "Product #107");
+            var product = new Product(id: Guid.NewGuid(), price: 105.50M, productName: "Product #107", productKind: ProductKind.Drink);
             repository.Add(product);
 
             repository.Delete(product.Id);
@@ -52,9 +52,9 @@ namespace Restaurant.IntegrationTests
         [Test]
         public void given_valid_product_should_update()
         {
-            var product = new Product(id: Guid.NewGuid(), price: 105.50M, productName: "Product #107");
+            var product = new Product(id: Guid.NewGuid(), price: 105.50M, productName: "Product #107", productKind: ProductKind.MainDish);
             repository.Add(product);
-            var productModified = new Product(id: product.Id, price: 125.55M, productName: "Product #1");
+            var productModified = new Product(id: product.Id, price: 125.55M, productName: "Product #1", productKind: ProductKind.MainDish);
 
             repository.Update(productModified);
 

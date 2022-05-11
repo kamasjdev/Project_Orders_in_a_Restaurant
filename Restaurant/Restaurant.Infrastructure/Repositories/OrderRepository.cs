@@ -51,7 +51,14 @@ namespace Restaurant.Infrastructure.Repositories
                 .Select(group =>
                 {
                     var combinedOwner = group.First();
-                    combinedOwner.AddProducts(group.Select(owner => owner.Products.Single()));
+                    var products = group.Select(owner => owner.Products.SingleOrDefault()).ToList();
+                    
+                    if (products.Any(p => p is null))
+                    {
+                        return combinedOwner;
+                    }
+
+                    combinedOwner.AddProducts(products);
                     return combinedOwner;
                 });
             return result.SingleOrDefault();

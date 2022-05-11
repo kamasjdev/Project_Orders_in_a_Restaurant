@@ -8,7 +8,7 @@ namespace Restaurant.ApplicationLogic.Mappings
     {
         public static Product AsEntity(this ProductDto productDto)
         {
-            var product = new Product(productDto.Id, productDto.ProductName, productDto.Price);
+            var product = new Product(productDto.Id, productDto.ProductName, productDto.Price, productDto.ProductKind);
             return product;
         }
 
@@ -18,7 +18,8 @@ namespace Restaurant.ApplicationLogic.Mappings
             {
                 Id = product.Id,
                 Price = product.Price,
-                ProductName = product.ProductName
+                ProductName = product.ProductName,
+                ProductKind = product.ProductKind
             };
 
             return productDto;
@@ -31,6 +32,7 @@ namespace Restaurant.ApplicationLogic.Mappings
                 Id = product.Id,
                 Price = product.Price,
                 ProductName = product.ProductName,
+                ProductKind = product.ProductKind,
                 Orders = product.Orders.Select(o => o.AsDto())
             };
 
@@ -70,6 +72,49 @@ namespace Restaurant.ApplicationLogic.Mappings
             };
 
             return orderDto;
+        }
+
+        public static ProductSaleDto AsDto(this ProductSale productSale)
+        {
+            var productSaleDto = new ProductSaleDto()
+            {
+                Id = productSale.Id,
+                Addition = productSale.Addition.AsDto(),
+                EndPrice = productSale.EndPrice,
+                OrderId = productSale.OrderId,
+                Product = productSale.Product.AsDto(),
+                ProductSaleState = productSale.ProductSaleState
+            };
+
+            return productSaleDto;
+        }
+
+        public static ProductSaleDetailsDto AsDetailsDto(this ProductSale productSale)
+        {
+            var productSaleDto = new ProductSaleDetailsDto()
+            {
+                Id = productSale.Id,
+                Addition = productSale.Addition.AsDto(),
+                EndPrice = productSale.EndPrice,
+                OrderId = productSale.OrderId,
+                Product = productSale.Product.AsDto(),
+                ProductSaleState = productSale.ProductSaleState,
+                Order = productSale.Order.AsDto()
+            };
+
+            return productSaleDto;
+        }
+
+        public static AdditionDto AsDto(this Addition addition)
+        {
+            var additionDto = new AdditionDto()
+            {
+                Id = addition.Id,
+                AdditionName = addition.AdditionName,
+                Price = addition.Price
+            };
+
+            return additionDto;
         }
     }
 }

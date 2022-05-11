@@ -4,6 +4,6 @@ namespace Restaurant.ApplicationLogic.DTO
 {
     public class OrderDetailsDto : OrderDto
     {
-        public IEnumerable<ProductDto> Products { get; set; }
+        public IEnumerable<ProductSaleDto> Products { get; set; }
     }
 }

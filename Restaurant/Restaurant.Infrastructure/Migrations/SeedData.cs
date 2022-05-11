@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Restaurant.Domain.Entities;
 using System;
 using System.Data;
 using System.Globalization;
@@ -14,8 +15,8 @@ namespace Restaurant.Infrastructure.Migrations
 
             if (result is null)
             {
-                dbConnection.Execute("INSERT INTO products (Id, ProductName, Price) VALUES (@Id, @ProductName, @Price)",
-                            new { Id = Guid.NewGuid(), ProductName = "Pizza", Price = 100.50M });
+                dbConnection.Execute("INSERT INTO products (Id, ProductName, Price, ProductKind) VALUES (@Id, @ProductName, @Price, @ProductKind)",
+                            new { Id = Guid.NewGuid(), ProductName = "Pizza", Price = 100.50M, ProductKind = ProductKind.Pizza });
                 dbConnection.Execute("INSERT INTO migrations (Id, Name, Version) VALUES (@Id, @Name, @Version)",
                             new { Id = Guid.NewGuid(), Name = $"First_Migration_{DateTime.UtcNow.ToString("s", CultureInfo.GetCultureInfo("en-US"))}", Version = result?.Version + 1 ?? 1 });
             }

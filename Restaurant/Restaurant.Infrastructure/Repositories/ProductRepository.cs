@@ -20,9 +20,8 @@ namespace Restaurant.Infrastructure.Repositories
 
         public Guid Add(Product entity)
         {
-            var sql = "INSERT INTO products (Id, ProductName, Price) VALUES (@Id, @ProductName, @Price)";
+            var sql = "INSERT INTO products (Id, ProductName, Price, ProductKind) VALUES (@Id, @ProductName, @Price, @ProductKind)";
             _dbConnection.Execute(sql, entity);
-                //new { Id = entity.Id, ProductName = entity.ProductName, WholePart = entity.Price.WholePart, FractionalPart = entity.Price.FractionalPart });
             return entity.Id;
         }
 
@@ -37,7 +36,7 @@ namespace Restaurant.Infrastructure.Repositories
             var sql = @"SELECT * FROM products p
                         LEFT JOIN product_sales ps ON ps.ProductId = p.Id
                         LEFT JOIN additions a on ps.AdditionId = a.Id
-                        LEFT JOIN orders o ON o.Id = op.OrderId
+                        LEFT JOIN orders o ON o.Id = ps.OrderId
                         WHERE p.Id = @Id";
             var result = _dbConnection.Query<Product, ProductSale, Addition, Order, Product>(sql,
                 (product, productSale, addition, order) => { 
@@ -50,7 +49,14 @@ namespace Restaurant.Infrastructure.Repositories
                 .Select(group =>
                 {
                     var combinedOwner = group.First();
-                    combinedOwner.AddOrders(group.Select(owner => owner.Orders.Single()));
+                    var orders = group.Select(owner => owner.Orders.SingleOrDefault()).ToList();
+
+                    if (orders.Any(o => o is null))
+                    {
+                        return combinedOwner;
+                    }
+
+                    combinedOwner.AddOrders(orders);
                     return combinedOwner;
                 });
             return result.SingleOrDefault();
@@ -65,9 +71,8 @@ namespace Restaurant.Infrastructure.Repositories
 
         public void Update(Product entity)
         {
-            var sql = "UPDATE products SET ProductName = @ProductName, Price = @Price WHERE Id = @Id";
+            var sql = "UPDATE products SET ProductName = @ProductName, Price = @Price, ProductKind = @ProductKind WHERE Id = @Id";
             _dbConnection.Execute(sql, entity);
-               // new { Id = entity.Id, ProductName = entity.ProductName, WholePart = entity.Price.WholePart, FractionalPart = entity.Price.FractionalPart });
         }
     }
 }
