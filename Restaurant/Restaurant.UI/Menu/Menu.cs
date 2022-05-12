@@ -15,7 +15,8 @@ namespace Restaurant.UI
         private List<Product> list_of_products = new List<Product>();     // lista produktów
         double amount_to_pay = 0.0;             // kwota do zapłaty
         private readonly IRequestHandler _requestHandler;
-        
+        private IEnumerable<ProductDto> _products = new List<ProductDto>();
+        private IEnumerable<AdditionDto> _additions = new List<AdditionDto>();
         public Menu(IRequestHandler requestHandler)
         {
             _requestHandler = requestHandler;
@@ -189,9 +190,11 @@ namespace Restaurant.UI
         private void OnLoad(object sender, EventArgs e)
         {
             labelCostOfOrder.Text = amount_to_pay > 0 ? "Koszt: " + amount_to_pay + "zł" : "";
-            var products = _requestHandler.Send<IProductService, IEnumerable<ProductDto>>(s => s.GetAll());
+            _products = _requestHandler.Send<IProductService, IEnumerable<ProductDto>>(s => s.GetAll());
+            _additions = _requestHandler.Send<IAdditonService, IEnumerable<AdditionDto>>(s => s.GetAll());
             //comboBoxMainDishes1.Items.Clear();
-            comboBoxMainDishes1.Items.AddRange(products.Select(p => p.ProductName).ToArray());
+            comboBoxAdditions.Items.AddRange(_additions.Select(a => a.AdditionName).ToArray());
+            comboBoxMainDishes1.Items.AddRange(_products.Select(p => p.ProductName).ToArray());
         }
     }
 }

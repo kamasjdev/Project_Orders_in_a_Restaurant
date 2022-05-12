@@ -113,7 +113,8 @@ namespace Restaurant.ApplicationLogic.Mappings
             {
                 Id = addition.Id,
                 AdditionName = addition.AdditionName,
-                Price = addition.Price
+                Price = addition.Price,
+                AdditionKind = addition.AdditionKind
             };
 
             return additionDto;

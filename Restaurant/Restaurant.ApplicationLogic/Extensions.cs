@@ -11,6 +11,7 @@ namespace Restaurant.ApplicationLogic
         {
             container.Register(Component.For<IProductService>().ImplementedBy<ProductService>().LifestyleTransient());
             container.Register(Component.For<IOrderService>().ImplementedBy<OrderService>().LifestyleTransient());
+            container.Register(Component.For<IAdditonService>().ImplementedBy<AdditonService>().LifestyleTransient());
             return container;
         }
     }

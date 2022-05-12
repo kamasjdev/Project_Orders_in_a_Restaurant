@@ -27,13 +27,13 @@ namespace Restaurant.Infrastructure.Migrations
         private static void AddDrinks(IDbConnection dbConnection)
         {
             dbConnection.Execute("INSERT INTO products (Id, ProductName, Price, ProductKind) VALUES (@Id, @ProductName, @Price, @ProductKind)",
-                        new { Id = Guid.NewGuid(), ProductName = "Kawa", Price = 100.50M, ProductKind = ProductKind.Drink });
+                        new { Id = Guid.NewGuid(), ProductName = "Kawa", Price = 5M, ProductKind = ProductKind.Drink });
 
             dbConnection.Execute("INSERT INTO products (Id, ProductName, Price, ProductKind) VALUES (@Id, @ProductName, @Price, @ProductKind)",
-                        new { Id = Guid.NewGuid(), ProductName = "Herbata", Price = 100.50M, ProductKind = ProductKind.Drink });
+                        new { Id = Guid.NewGuid(), ProductName = "Herbata", Price = 5M, ProductKind = ProductKind.Drink });
 
             dbConnection.Execute("INSERT INTO products (Id, ProductName, Price, ProductKind) VALUES (@Id, @ProductName, @Price, @ProductKind)",
-                        new { Id = Guid.NewGuid(), ProductName = "Cola", Price = 100.50M, ProductKind = ProductKind.Drink });
+                        new { Id = Guid.NewGuid(), ProductName = "Cola", Price = 5M, ProductKind = ProductKind.Drink });
         }
 
         private static void AddSoups(IDbConnection dbConnection)
