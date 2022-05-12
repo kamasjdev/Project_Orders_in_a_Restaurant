@@ -56,10 +56,10 @@ namespace Restaurant.Infrastructure.Migrations
             dbConnection.Execute("INSERT INTO products (Id, ProductName, Price, ProductKind) VALUES (@Id, @ProductName, @Price, @ProductKind)",
                         new { Id = Guid.NewGuid(), ProductName = "Placek po węgiersku ", Price = 27M, ProductKind = ProductKind.MainDish });
 
-            dbConnection.Execute("INSERT INTO additons (Id, AdditionName, Price) VALUES (@Id, @AdditionName, @Price)",
-                        new { Id = Guid.NewGuid(), AdditionName = "Bar sałatkowy", Price = 5M });
-            dbConnection.Execute("INSERT INTO additons (Id, AdditionName, Price) VALUES (@Id, @AdditionName, @Price)",
-                        new { Id = Guid.NewGuid(), AdditionName = "Zestaw sosów", Price = 6M });
+            dbConnection.Execute("INSERT INTO additions (Id, AdditionName, Price, AdditionKind) VALUES (@Id, @AdditionName, @Price, @AdditionKind)",
+                        new { Id = Guid.NewGuid(), AdditionName = "Bar sałatkowy", Price = 5M, AdditionKind = ProductKind.MainDish });
+            dbConnection.Execute("INSERT INTO additions (Id, AdditionName, Price, AdditionKind) VALUES (@Id, @AdditionName, @Price, @AdditionKind)",
+                        new { Id = Guid.NewGuid(), AdditionName = "Zestaw sosów", Price = 6M, AdditionKind = ProductKind.MainDish });
         }
 
         private static void AddPizzaWithAdditions(IDbConnection dbConnection)
@@ -76,14 +76,14 @@ namespace Restaurant.Infrastructure.Migrations
             dbConnection.Execute("INSERT INTO products (Id, ProductName, Price, ProductKind) VALUES (@Id, @ProductName, @Price, @ProductKind)",
                         new { Id = Guid.NewGuid(), ProductName = "Pizza Venecia", Price = 25M, ProductKind = ProductKind.Pizza });
 
-            dbConnection.Execute("INSERT INTO additons (Id, AdditionName, Price) VALUES (@Id, @AdditionName, @Price)",
-                        new { Id = Guid.NewGuid(), AdditionName = "Podwójny ser", Price = 2M });
-            dbConnection.Execute("INSERT INTO additons (Id, AdditionName, Price) VALUES (@Id, @AdditionName, @Price)",
-                        new { Id = Guid.NewGuid(), AdditionName = "Salami", Price = 2M });
-            dbConnection.Execute("INSERT INTO additons (Id, AdditionName, Price) VALUES (@Id, @AdditionName, @Price)",
-                        new { Id = Guid.NewGuid(), AdditionName = "Szynka", Price = 2M });
-            dbConnection.Execute("INSERT INTO additons (Id, AdditionName, Price) VALUES (@Id, @AdditionName, @Price)",
-                        new { Id = Guid.NewGuid(), AdditionName = "Pieczarki", Price = 2M });
+            dbConnection.Execute("INSERT INTO additions (Id, AdditionName, Price, AdditionKind) VALUES (@Id, @AdditionName, @Price, @AdditionKind)",
+                        new { Id = Guid.NewGuid(), AdditionName = "Podwójny ser", Price = 2M, AdditionKind = ProductKind.Pizza });
+            dbConnection.Execute("INSERT INTO additions (Id, AdditionName, Price, AdditionKind) VALUES (@Id, @AdditionName, @Price, @AdditionKind)",
+                        new { Id = Guid.NewGuid(), AdditionName = "Salami", Price = 2M, AdditionKind = ProductKind.Pizza });
+            dbConnection.Execute("INSERT INTO additions (Id, AdditionName, Price, AdditionKind) VALUES (@Id, @AdditionName, @Price, @AdditionKind)",
+                        new { Id = Guid.NewGuid(), AdditionName = "Szynka", Price = 2M, AdditionKind = ProductKind.Pizza });
+            dbConnection.Execute("INSERT INTO additions (Id, AdditionName, Price, AdditionKind) VALUES (@Id, @AdditionName, @Price, @AdditionKind)",
+                        new { Id = Guid.NewGuid(), AdditionName = "Pieczarki", Price = 2M, AdditionKind = ProductKind.Pizza });
         }
     }
 }

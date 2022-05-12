@@ -46,7 +46,7 @@ namespace Restaurant.Infrastructure.Repositories
 
         public static Addition AsEntity(this AdditionPOCO additionPOCO)
         {
-            var addition = new Addition(additionPOCO.Id, additionPOCO.AdditionName, additionPOCO.Price);
+            var addition = new Addition(additionPOCO.Id, additionPOCO.AdditionName, additionPOCO.Price, additionPOCO.AdditionKind);
             return addition;
         }
     }

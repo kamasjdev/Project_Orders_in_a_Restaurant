@@ -8,14 +8,16 @@ namespace Restaurant.Domain.Entities
         {
         }
 
-        public Addition(Guid id, string name, decimal price) : base(id)
+        public Addition(Guid id, string name, decimal price, ProductKind additionKind) : base(id)
         {
             ChangeAdditionName(name);
             ChangePrice(price);
+            AdditionKind = additionKind;
         }
 
         public string AdditionName { get; private set; }
         public decimal Price { get; private set; }
+        public ProductKind AdditionKind { get; set; }
 
         public void ChangeAdditionName(string additionName)
         {
