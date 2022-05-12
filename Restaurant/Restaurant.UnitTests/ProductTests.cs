@@ -95,7 +95,7 @@ namespace Restaurant.UnitTests
         public void given_valid_orders_should_add()
         {
             var product = new Product(Guid.NewGuid(), "Product #1", 100M, ProductKind.MainDish);
-            var orders = new List<Order>() { new Order(Guid.NewGuid(), "ORDER", DateTime.UtcNow, 100M, "email@email.com") };
+            var orders = new List<Order>() { new Order(Guid.NewGuid(), "ORDER", DateTime.UtcNow, 100M, Email.Of("email@email.com")) };
 
             product.AddOrders(orders);
 

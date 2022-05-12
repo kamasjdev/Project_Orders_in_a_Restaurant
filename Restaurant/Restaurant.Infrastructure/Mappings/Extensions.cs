@@ -9,6 +9,7 @@ namespace Restaurant.Infrastructure.Mappings
         public static IWindsorContainer ApplyMappings(this IWindsorContainer container)
         {
             SqlMapper.AddTypeHandler(new SqliteGuidHandler());
+            SqlMapper.AddTypeHandler(new EmailHandler());
             SqlMapper.RemoveTypeMap(typeof(Guid));
             SqlMapper.RemoveTypeMap(typeof(Guid?));
             return container;

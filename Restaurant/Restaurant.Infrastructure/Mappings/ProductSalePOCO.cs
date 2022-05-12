@@ -14,5 +14,6 @@ namespace Restaurant.Infrastructure.Mappings
         public Guid? OrderId { get; set; }
         public OrderPOCO Order { get; set; }
         public ProductSaleState ProductSaleState { get; set; }
+        public string Email { get; set; }
     }
 }

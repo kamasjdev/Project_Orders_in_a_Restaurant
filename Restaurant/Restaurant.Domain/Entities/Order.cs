@@ -7,11 +7,9 @@ namespace Restaurant.Domain.Entities
 {
     public class Order : BaseEntity<Guid>
     {
-        public const string EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+        private Order() {}
 
-        private Order() { _products = new List<ProductSale>(); }
-
-        public Order(Guid id, string orderNumber, DateTime created, decimal price, string email, string note = null, IEnumerable<ProductSale> products = null) 
+        public Order(Guid id, string orderNumber, DateTime created, decimal price, Email email, string note = null, IEnumerable<ProductSale> products = null) 
             : base(id)
         {
             ChangeOrderNumber(orderNumber);
@@ -23,10 +21,6 @@ namespace Restaurant.Domain.Entities
             {
                 AddProducts(products);
             }
-            else
-            {
-                _products = new List<ProductSale>();
-            }
             
             Note = note;
         }
@@ -34,7 +28,7 @@ namespace Restaurant.Domain.Entities
         public string OrderNumber { get; private set; }
         public DateTime Created { get; }
         public decimal Price { get; private set; }
-        public string Email { get; private set; }
+        public Email Email { get; private set; }
         public string Note { get; set; } = null;
 
         public IEnumerable<ProductSale> Products => _products;
@@ -65,18 +59,8 @@ namespace Restaurant.Domain.Entities
             Price = price;
         }
 
-        public void ChangeEmail(string email)
+        public void ChangeEmail(Email email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                throw new InvalidOperationException("Email cannot be empty");
-            }
-
-            if (!Regex.Match(email, EMAIL_PATTERN).Success)
-            {
-                throw new InvalidOperationException("Invalid Email");
-            }
-
             Email = email;
         }
 

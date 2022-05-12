@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Restaurant.Domain.Entities
 {
@@ -8,7 +9,7 @@ namespace Restaurant.Domain.Entities
         {
         }
 
-        public ProductSale(Guid id, Product product, ProductSaleState productSaleState, Addition addition = null, Guid? orderId = null, Order order = null)
+        public ProductSale(Guid id, Product product, ProductSaleState productSaleState, Email email, Addition addition = null, Guid? orderId = null, Order order = null)
             : base(id)
         {
             ChangeProduct(product);
@@ -21,6 +22,7 @@ namespace Restaurant.Domain.Entities
             OrderId = orderId;
             Order = order;
             ProductSaleState = productSaleState;
+            Email = email;
         }
 
         public Guid ProductId { get; private set; }
@@ -31,6 +33,7 @@ namespace Restaurant.Domain.Entities
         public Guid? OrderId { get; private set; }
         public Order Order { get; private set; } = null;
         public ProductSaleState ProductSaleState { get; private set; } = ProductSaleState.New;
+        public Email Email { get; private set; }
 
         public void ChangeProduct(Product product)
         {
@@ -105,6 +108,11 @@ namespace Restaurant.Domain.Entities
             Order = null;
             OrderId = null;
             ProductSaleState = ProductSaleState.New;
+        }
+
+        public void ChangeEmail(Email email)
+        {
+            Email = email;
         }
     }
 }

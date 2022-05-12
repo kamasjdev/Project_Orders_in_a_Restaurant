@@ -92,6 +92,7 @@ namespace Restaurant.Infrastructure
                                                 OrderId TEXT,
                                                 AdditionId TEXT,
                                                 EndPrice REAL NOT NULL,
+	                                            Email TEXT NOT NULL,
                                                 ProductSaleState INTEGER NOT NULL,
                                                 CONSTRAINT FK_PRODUCTS FOREIGN KEY (ProductId) REFERENCES products,
                                                 CONSTRAINT FK_ORDERS FOREIGN KEY (OrderId) REFERENCES orders,

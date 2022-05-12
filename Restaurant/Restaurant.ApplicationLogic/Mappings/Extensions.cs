@@ -1,5 +1,6 @@
 ﻿using Restaurant.ApplicationLogic.DTO;
 using Restaurant.Domain.Entities;
+using System;
 using System.Linq;
 
 namespace Restaurant.ApplicationLogic.Mappings
@@ -41,7 +42,7 @@ namespace Restaurant.ApplicationLogic.Mappings
 
         public static Order AsEntity(this OrderDto orderDto)
         {
-            var order = new Order(orderDto.Id, orderDto.Email, orderDto.Created, orderDto.Price, orderDto.OrderNumber);
+            var order = new Order(orderDto.Id, orderDto.OrderNumber, orderDto.Created, orderDto.Price, Email.Of(orderDto.Email), orderDto.Note);
             return order;
         }
 
@@ -50,7 +51,7 @@ namespace Restaurant.ApplicationLogic.Mappings
             var orderDto = new OrderDto()
             {
                 Id = order.Id,
-                Email = order.Email,
+                Email = order.Email.Value,
                 OrderNumber = order.OrderNumber,
                 Created = order.Created,
                 Price = order.Price
@@ -64,10 +65,11 @@ namespace Restaurant.ApplicationLogic.Mappings
             var orderDto = new OrderDetailsDto()
             {
                 Id = order.Id,
-                Email = order.Email,
+                Email = order.Email.Value,
                 OrderNumber = order.OrderNumber,
                 Created = order.Created,
                 Price = order.Price,
+                Note = order.Note,
                 Products = order.Products.Select(p => p.AsDto())
             };
 

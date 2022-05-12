@@ -20,7 +20,7 @@ namespace Restaurant.IntegrationTests
         [Test]
         public void given_valid_order_should_add_to_db()
         {
-            var order = new Order(id: Guid.NewGuid(), price: 105.50M, orderNumber: "ORD/5", email: "email@email.com", created: DateTime.UtcNow);
+            var order = new Order(id: Guid.NewGuid(), price: 105.50M, orderNumber: "ORD/5", email: Email.Of("email@email.com"), created: DateTime.UtcNow);
 
             repository.Add(order);
 
@@ -32,7 +32,7 @@ namespace Restaurant.IntegrationTests
         [Test]
         public void given_valid_id_should_delete_order()
         {
-            var order = new Order(id: Guid.NewGuid(), price: 105.50M, orderNumber: "ORD/502", email: "email2@email.com", created: DateTime.UtcNow);
+            var order = new Order(id: Guid.NewGuid(), price: 105.50M, orderNumber: "ORD/502", email: Email.Of("email2@email.com"), created: DateTime.UtcNow);
             repository.Add(order);
 
             repository.Delete(order.Id);
@@ -53,7 +53,7 @@ namespace Restaurant.IntegrationTests
         [Test]
         public void given_valid_product_should_update()
         {
-            var order = new Order(id: Guid.NewGuid(), price: 105.50M, orderNumber: "ORD/5", email: "email@email.com", created: DateTime.UtcNow);
+            var order = new Order(id: Guid.NewGuid(), price: 105.50M, orderNumber: "ORD/5", email: Email.Of("email@email.com"), created: DateTime.UtcNow);
             repository.Add(order);
             var orderModified = new Order(id: order.Id, price: 125.55M, orderNumber: "ORD/524", email: order.Email, created: order.Created);
 

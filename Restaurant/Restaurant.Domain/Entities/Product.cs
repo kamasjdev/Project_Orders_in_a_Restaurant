@@ -6,10 +6,7 @@ namespace Restaurant.Domain.Entities
 {
     public class Product : BaseEntity<Guid>
     {
-        private Product()
-        {
-            _orders = new List<Order>();
-        }
+        private Product() {}
 
         public Product(Guid id, string productName, decimal price, ProductKind productKind, IList<Order> orders = null)
             : base(id)
@@ -25,7 +22,7 @@ namespace Restaurant.Domain.Entities
         public ProductKind ProductKind { get; set; }
 
         public IEnumerable<Order> Orders => _orders;
-        private IList<Order> _orders;
+        private IList<Order> _orders = new List<Order>();
 
         public void ChangePrice(decimal price)
         {

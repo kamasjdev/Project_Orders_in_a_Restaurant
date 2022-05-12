@@ -12,7 +12,7 @@ namespace Restaurant.UnitTests
         {
             var orderNumber = "ORDER/1/2";
             var price = 100M;
-            var email = "email@test.email.com";
+            var email = Email.Of("email@test.email.com");
 
             var order = new Order(Guid.NewGuid(), orderNumber, DateTime.UtcNow, price, email);
 
@@ -27,7 +27,7 @@ namespace Restaurant.UnitTests
         {
             var firstOrderNumber = "ORDER/1/2";
             var secondOrderNumber = "";
-            var order = new Order(Guid.NewGuid(), firstOrderNumber, DateTime.UtcNow, 100M, "email@test.email.com");
+            var order = new Order(Guid.NewGuid(), firstOrderNumber, DateTime.UtcNow, 100M, Email.Of("email@test.email.com"));
 
             var exception = Should.Throw<Exception>(() => order.ChangeOrderNumber(secondOrderNumber));
 
@@ -41,7 +41,7 @@ namespace Restaurant.UnitTests
         {
             var firstOrderNumber = "ORDER/1/2";
             var secondOrderNumber = "O";
-            var order = new Order(Guid.NewGuid(), firstOrderNumber, DateTime.UtcNow, 100M, "email@test.email.com");
+            var order = new Order(Guid.NewGuid(), firstOrderNumber, DateTime.UtcNow, 100M, Email.Of("email@test.email.com"));
 
             var exception = Should.Throw<Exception>(() => order.ChangeOrderNumber(secondOrderNumber));
 
@@ -55,7 +55,7 @@ namespace Restaurant.UnitTests
         {
             var firstOrderNumber = "ORDER/1/2";
             var secondOrderNumber = "ORDER/1/2/3";
-            var order = new Order(Guid.NewGuid(), firstOrderNumber, DateTime.UtcNow, 100M, "email@test.email.com");
+            var order = new Order(Guid.NewGuid(), firstOrderNumber, DateTime.UtcNow, 100M, Email.Of("email@test.email.com"));
 
             order.ChangeOrderNumber(secondOrderNumber);
 
@@ -68,7 +68,7 @@ namespace Restaurant.UnitTests
         {
             var firstPrice = 100M;
             var secondPrice = -200M;
-            var order = new Order(Guid.NewGuid(), "ORDER/1/2", DateTime.UtcNow, firstPrice, "email@test.email.com");
+            var order = new Order(Guid.NewGuid(), "ORDER/1/2", DateTime.UtcNow, firstPrice, Email.Of("email@test.email.com"));
 
             var exception = Should.Throw<Exception>(() => order.ChangePrice(secondPrice));
 
@@ -82,7 +82,7 @@ namespace Restaurant.UnitTests
         {
             var firstPrice = 100M;
             var secondPrice = 200M;
-            var order = new Order(Guid.NewGuid(), "ORDER/1/2", DateTime.UtcNow, firstPrice, "email@test.email.com");
+            var order = new Order(Guid.NewGuid(), "ORDER/1/2", DateTime.UtcNow, firstPrice, Email.Of("email@test.email.com"));
 
             order.ChangePrice(secondPrice);
 
@@ -93,11 +93,9 @@ namespace Restaurant.UnitTests
         [Test]
         public void given_empty_email_should_throw_an_exception()
         {
-            var firstEmail = "email@email.com";
             var secondEmail = "";
-            var order = new Order(Guid.NewGuid(), "ORDER/1/2", DateTime.UtcNow, 100M, firstEmail);
-
-            var exception = Should.Throw<Exception>(() => order.ChangeEmail(secondEmail));
+            
+            var exception = Should.Throw<Exception>(() => Email.Of(secondEmail));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidOperationException>();
@@ -107,11 +105,9 @@ namespace Restaurant.UnitTests
         [Test]
         public void given_invalid_email_should_throw_an_exception()
         {
-            var firstEmail = "email@email.com";
             var secondEmail = "admin.com";
-            var order = new Order(Guid.NewGuid(), "ORDER/1/2", DateTime.UtcNow, 100M, firstEmail);
-
-            var exception = Should.Throw<Exception>(() => order.ChangeEmail(secondEmail));
+         
+            var exception = Should.Throw<Exception>(() => Email.Of(secondEmail));
 
             exception.ShouldNotBeNull();
             exception.ShouldBeOfType<InvalidOperationException>();
@@ -121,8 +117,8 @@ namespace Restaurant.UnitTests
         [Test]
         public void given_valid_email_should_change()
         {
-            var firstEmail = "email@email.com";
-            var secondEmail = "admin@gmail.com";
+            var firstEmail = Email.Of("email@email.com");
+            var secondEmail = Email.Of("admin@gmail.com");
             var order = new Order(Guid.NewGuid(), "ORDER/1/2", DateTime.UtcNow, 100M, firstEmail);
 
             order.ChangeEmail(secondEmail);

@@ -24,7 +24,7 @@ namespace Restaurant.Infrastructure.Repositories
         public static Order AsEntity(this OrderPOCO orderPOCO)
         {
             var order = new Order(orderPOCO.Id, orderPOCO.OrderNumber, orderPOCO.Created, orderPOCO.Price,
-                    orderPOCO.Email, orderPOCO.Note);
+                    Email.Of(orderPOCO.Email), orderPOCO.Note);
             return order;
         }
 
@@ -32,14 +32,14 @@ namespace Restaurant.Infrastructure.Repositories
         {
             var productSales = orderPOCO.Products.Select(p => p.AsEntity()).ToList();
             var order = new Order(orderPOCO.Id, orderPOCO.OrderNumber, orderPOCO.Created, orderPOCO.Price,
-                    orderPOCO.Email, orderPOCO.Note, productSales);
+                    Email.Of(orderPOCO.Email), orderPOCO.Note, productSales);
             return order;
         }
 
         public static ProductSale AsEntity(this ProductSalePOCO productSalePOCO)
         {
             var productSale = new ProductSale(productSalePOCO.Id, productSalePOCO.Product.AsEntity(),
-                productSalePOCO.ProductSaleState, productSalePOCO.Addition?.AsEntity(),
+                productSalePOCO.ProductSaleState, Email.Of(productSalePOCO.Email), productSalePOCO.Addition?.AsEntity(),
                 productSalePOCO.OrderId);
             return productSale;
         }
