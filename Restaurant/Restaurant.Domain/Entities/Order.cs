@@ -38,7 +38,7 @@ namespace Restaurant.Domain.Entities
         public string Note { get; set; } = null;
 
         public IEnumerable<ProductSale> Products => _products;
-        private IList<ProductSale> _products;
+        private IList<ProductSale> _products = new List<ProductSale>();
 
         public void ChangeOrderNumber(string orderNumber)
         {

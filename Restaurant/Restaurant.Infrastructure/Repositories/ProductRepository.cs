@@ -2,6 +2,7 @@
 using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.Domain.Entities;
 using Restaurant.Domain.Repositories;
+using Restaurant.Infrastructure.Mappings;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -33,15 +34,25 @@ namespace Restaurant.Infrastructure.Repositories
 
         public Product Get(Guid id)
         {
-            var sql = @"SELECT * FROM products p
+            var sql = @"SELECT p.*, ps.*, a.*, o.* FROM products p
                         LEFT JOIN product_sales ps ON ps.ProductId = p.Id
                         LEFT JOIN additions a on ps.AdditionId = a.Id
                         LEFT JOIN orders o ON o.Id = ps.OrderId
                         WHERE p.Id = @Id";
-            var result = _dbConnection.Query<Product, ProductSale, Addition, Order, Product>(sql,
+            var result = _dbConnection.Query<ProductPOCO, ProductSalePOCO, AdditionPOCO, OrderPOCO, ProductPOCO>(sql,
                 (product, productSale, addition, order) => { 
-                    if (order?.Id != Guid.Empty) {
-                        product.AddOrder(order);
+                    if (order != null && order.Id != Guid.Empty) {
+                        if (productSale != null && productSale.Id != Guid.Empty)
+                        {
+                            if (addition != null && addition.Id != Guid.Empty)
+                            {
+                                productSale.Addition = addition;
+                            }
+                            productSale.Product = product;
+                            order.Products.Add(productSale);
+                        }
+
+                        product.Orders.Add(order);
                     }
                     return product; },
                 new { Id = id })
@@ -56,17 +67,22 @@ namespace Restaurant.Infrastructure.Repositories
                         return combinedOwner;
                     }
 
-                    combinedOwner.AddOrders(orders);
+                    foreach (var order in orders)
+                    {
+                        combinedOwner.Orders.Add(order);
+                    }
                     return combinedOwner;
                 });
-            return result.SingleOrDefault();
+            
+            var productToReturn = result.SingleOrDefault();
+            return productToReturn?.AsDetailsEntity();
         }
 
         public ICollection<Product> GetAll()
         {
             var sql = "SELECT * FROM products";
-            var result = _dbConnection.Query<Product>(sql);
-            return result.ToList();
+            var result = _dbConnection.Query<ProductPOCO>(sql);
+            return result.Select(p => p.AsEntity()).ToList();
         }
 
         public void Update(Product entity)

@@ -6,14 +6,15 @@ using System;
 
 namespace Restaurant.IntegrationTests
 {
-    public class OrderRepositoryTests : BaseTest
+    [TestFixture]
+    public class OrderRepositoryTests
     {
         private IOrderRepository repository;
 
         [SetUp]
         public void Setup()
         {
-            repository = container.Resolve<IOrderRepository>();
+            repository = Config.Container.Resolve<IOrderRepository>();
         }
 
         [Test]

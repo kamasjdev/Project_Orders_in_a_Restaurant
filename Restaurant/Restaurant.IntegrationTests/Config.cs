@@ -7,16 +7,17 @@ using System.IO;
 
 namespace Restaurant.IntegrationTests
 {
-    public class BaseTest
+    [SetUpFixture]
+    public class Config
     {
-        protected IWindsorContainer container;
-        private IDisposable dispose;
+        public static IWindsorContainer Container;
+        private static IDisposable dispose;
 
         [OneTimeSetUp]
         public void OnetTimeSetup()
         {
-            container = new TestApplicationFactory().StartApplication();
-            dispose = container.BeginScope();
+            Container = new TestApplicationFactory().StartApplication();
+            dispose = Container.BeginScope();
         }
 
         [OneTimeTearDown]
@@ -25,8 +26,8 @@ namespace Restaurant.IntegrationTests
             System.Data.SQLite.SQLiteConnection.ClearAllPools();
             if (dispose != null)
                 dispose.Dispose();
-            if (container != null)
-                container.Dispose();
+            if (Container != null)
+                Container.Dispose();
             File.Delete(Environment.CurrentDirectory + Path.DirectorySeparatorChar + TestApplicationFactory.DB_FILE_NAME);
         }
     }

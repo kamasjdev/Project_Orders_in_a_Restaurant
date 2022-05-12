@@ -2,6 +2,7 @@
 using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.Domain.Entities;
 using Restaurant.Domain.Repositories;
+using Restaurant.Infrastructure.Mappings;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -38,11 +39,16 @@ namespace Restaurant.Infrastructure.Repositories
                         LEFT JOIN additions a on ps.AdditionId = a.Id
                         LEFT JOIN products p ON p.Id = ps.ProductId
                         WHERE o.Id = @Id";
-            var result = _dbConnection.Query<Order, ProductSale, Addition, Product, Order>(sql,
+            var result = _dbConnection.Query<OrderPOCO, ProductSalePOCO, AdditionPOCO, ProductPOCO, OrderPOCO>(sql,
                 (order, productSale, addition, product) => {
-                    if (productSale?.Id != Guid.Empty)
+                    if (productSale != null && productSale.Id != Guid.Empty)
                     {
-                        order.AddProduct(productSale);
+                        if(addition != null && addition.Id != Guid.Empty)
+                        {
+                            productSale.Addition = addition;
+                        }
+                        productSale.Product = product;
+                        order.Products.Add(productSale);
                     }
                     return order;
                 },
@@ -58,17 +64,25 @@ namespace Restaurant.Infrastructure.Repositories
                         return combinedOwner;
                     }
 
-                    combinedOwner.AddProducts(products);
+                    foreach(var product in products)
+                    {
+                        combinedOwner.Products.Add(product);
+                    }
+
+                    combinedOwner.Products = combinedOwner.Products.Distinct().ToList();
+                    
                     return combinedOwner;
                 });
-            return result.SingleOrDefault();
+
+            var orderToReturn = result.SingleOrDefault();
+            return orderToReturn?.AsDetailsEntity();
         }
 
         public ICollection<Order> GetAll()
         {
             var sql = "SELECT * FROM orders";
-            var result = _dbConnection.Query<Order>(sql);
-            return result.ToList();
+            var result = _dbConnection.Query<OrderPOCO>(sql);
+            return result.Select(o => o.AsEntity()).ToList();
         }
 
         public void Update(Order entity)

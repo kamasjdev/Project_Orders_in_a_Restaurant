@@ -6,14 +6,15 @@ using System;
 
 namespace Restaurant.IntegrationTests
 {
-    public class ProductRepositoryTests : BaseTest
+    [TestFixture]
+    public class ProductRepositoryTests
     {
         private IProductRepository repository;
 
         [SetUp]
         public void Setup()
         {
-            repository = container.Resolve<IProductRepository>();
+            repository = Config.Container.Resolve<IProductRepository>();
         }
 
         [Test]
