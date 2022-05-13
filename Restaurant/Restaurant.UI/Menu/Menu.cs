@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Restaurant.UI.Components;
 using Restaurant.Infrastructure.Requests;
 using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.ApplicationLogic.DTO;
@@ -12,22 +11,25 @@ namespace Restaurant.UI
 {
     public partial class Menu : UserControl
     {
-        private Dictionary<string, double> products = new Dictionary<string, double>(); // kolekcja produktow (nazwa) i wartości (ceny)
-        private List<Product> list_of_products = new List<Product>();     // lista produktów
-        double amount_to_pay = 0.0;             // kwota do zapłaty
+        private readonly List<ProductDto> productsList = new List<ProductDto>();
+        private readonly List<AdditionDto> additionsList = new List<AdditionDto>();
+        decimal amountToPay = decimal.Zero;
         private readonly IRequestHandler _requestHandler;
         private IEnumerable<ProductDto> _products = new List<ProductDto>();
         private IEnumerable<AdditionDto> _additions = new List<AdditionDto>();
         private ProductDto currentProduct;
         private AdditionDto currentAddition;
+        private readonly Options _options;
+        private string email;
 
-        public Menu(IRequestHandler requestHandler)
+        public Menu(IRequestHandler requestHandler, Options options)
         {
             _requestHandler = requestHandler;
+            _options = options;
             InitializeComponent();
         }
 
-        private void ChangedItem(object sender, EventArgs e) // funkcja wywołuje się gdy zostanie zmieniona wartość w głównych daniach daniach (comboBoxMainDishes1)
+        private void ChangedItem(object sender, EventArgs e)
         {
             var currentProductName = (string) comboBoxMainDishes1.SelectedItem;
 
@@ -61,42 +63,63 @@ namespace Restaurant.UI
             }
         }
 
-        private void AddToOrder(object sender, EventArgs e) // funkcja realizująca dodanie elementu do listy zamówienia
+        private void AddToOrder(object sender, EventArgs e)
         {
-            Product product = AppService.SelectedDish(comboBoxMainDishes1, null, comboBoxAdditions, products);
+            var product = _products.Where(p => p.ProductName == (string) comboBoxMainDishes1.SelectedItem).SingleOrDefault();
+
             if (product != null)
             {
-                list_of_products.Add(product);     // dodaj product do listy produktów
-                listViewOrderedProducts.Items.Add(product.ToString()); // dodaj product do listy zamówionych produktów
+                productsList.Add(product);
+                listViewOrderedProducts.Items.Add(product.ToString());
+            }
+
+            var addition = _additions.Where(a => a.AdditionName == (string)comboBoxAdditions.SelectedItem).SingleOrDefault();
+
+            if (addition != null)
+            {
+                additionsList.Add(addition);
+                listViewOrderedProducts.Items.Add(addition.ToString());
             }
         }
 
-        private void DeleteFromOrder(object sender, EventArgs e)  // funkcja realizująca usunięcie elementu z listy zamówienia
+        private void DeleteFromOrder(object sender, EventArgs e)
         {
-            if (listViewOrderedProducts.SelectedItems != null) // jeśli wybrane produkty są różne od null
+            if (listViewOrderedProducts.SelectedItems != null)
             {
-                if (listViewOrderedProducts.SelectedIndices.Count <= 0) // gdy nie zaznaczono nic na liście zamówionych produktów to przerwij działanie funkcji
+                if (listViewOrderedProducts.SelectedIndices.Count <= 0)
                 {
                     return;
                 }
-                else if (listViewOrderedProducts.SelectedIndices.Count >= 1) // gdy wybrano 1 lub więcej produktów to usuń podaną ilość
-                {
-                    var wynik = MessageBox.Show("Czy chcesz usunąć danie", "Usuń danie",
-                               MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Question);    // potwierdzenie usunięcia produktów
 
-                    if (wynik == DialogResult.Yes)  // jeśli tak to usuń
+                else if (listViewOrderedProducts.SelectedIndices.Count >= 1)
+                {
+                    var result = MessageBox.Show("Czy chcesz usunąć danie", "Usuń danie",
+                               MessageBoxButtons.YesNo,
+                                 MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
                     {
-                        // pętla usuwające odpowiednie produkty (umieszczone na indeksie w liście listViewOrderedProducts.SelectedIndices)
                         for (int i = listViewOrderedProducts.SelectedIndices.Count - 1; i >= 0; i--)
                         {
-                            int selectedindex = listViewOrderedProducts.SelectedIndices[i]; // wybrany indeks
-                            listViewOrderedProducts.Items.RemoveAt(selectedindex);  // usuń z listy listViewOrderedProducts
-                            list_of_products.RemoveAt(selectedindex); // usuń z listy produktów
+                            int selectedindex = listViewOrderedProducts.SelectedIndices[i];
+                            var item = listViewOrderedProducts.Items[selectedindex].Text;
+                            listViewOrderedProducts.Items.RemoveAt(selectedindex);
+                            
+                            var product = productsList.Where(p => p.ProductName == item).FirstOrDefault();
+                            if (product != null)
+                            {
+                                productsList.Remove(product);
+                                continue;
+                            }
+
+                            var addition = additionsList.Where(a => a.AdditionName == item).FirstOrDefault();
+                            if (addition != null)
+                            {
+                                additionsList.Remove(addition);
+                                continue;
+                            }
                         }
                     }
-                    else  // w innym przypadku przerwij działanie funkcji
-                        return;
                 }
             }
         }
@@ -107,7 +130,7 @@ namespace Restaurant.UI
             {
                 var additionPrice = currentAddition != null ? currentAddition.Price : decimal.Zero;
                 var amountPrice = currentProduct.Price + additionPrice;
-                PriceProduct.Text = $"{string.Format("{0:0.00}", amountPrice)} zł";
+                PriceProduct.Text = $"{amountPrice.WithTwoDecimalPoints()} zł";
 
                 if (amountPrice > 0)
                 {
@@ -122,24 +145,28 @@ namespace Restaurant.UI
             }
             
 
-            amount_to_pay = 0.0; // koszt całkowity
-            if (list_of_products != null) // jeśli lista produktów nie jest pusta
-            {
-                // obliczanie kosztów zamówienia
-                foreach (Product p in list_of_products)
-                    amount_to_pay = amount_to_pay + p.CalculateCost();
-            }
-            else // w przeciwnym wypadku ustaw całkowity koszt na 0
-                amount_to_pay = 0.0;
+            amountToPay = decimal.Zero;
 
-            labelCostOfOrder.Text = "Koszt: " + amount_to_pay.ToString() + "zł"; // przypisz do labelCostOfOrder koszta
+            if (productsList != null)
+            {
+                foreach (ProductDto p in productsList)
+                {
+                    amountToPay += p.Price;
+                }
+            }
+            else
+            {
+                amountToPay = decimal.Zero;
+            }
+
+            labelCostOfOrder.Text = "Koszt: " + amountToPay.WithTwoDecimalPoints() + "zł";
         }
 
         private void LoadLeftMenu(object sender, EventArgs e) // funkcja wykrywająca zmianę pozycji Visible
         {
             if (this.Visible == true)
             {
-                var email = Extensions.ShowDialogEmail("Wprowadź email", "Email", 
+                email = Extensions.ShowDialogEmail("Wprowadź email", "Email", 
                     (emailToValid) =>
                     {
                         if (string.IsNullOrWhiteSpace(emailToValid))
@@ -160,24 +187,21 @@ namespace Restaurant.UI
             else
             {
                 timer1.Enabled = false;
+                productsList.Clear();
             }
         }
 
         private void OrderRealization(object sender, EventArgs e)  // funkcja realizująca zamówienie, która przesyła zawartość zamówienia na adres email i wstawia wartości do tabeli SQL
         {
-            if (list_of_products.Count != 0) // gdy lista produktów nie jest pusta
+            if (productsList.Count != 0) // gdy lista produktów nie jest pusta
             {
-                Options user = AppService.LoadSettings();
-
-                if (user != null)
-                {
-                    Order order = new Order(list_of_products)
+                Order order = new Order(new List<Components.Product>())
                     {
-                       // Email = user.Email_to
+                        Email = email
                     };// stwórz zamówienie (obiekt) z listy produktów
                     
 
-                    bool email_sent = MailSender.Email(MailSender.ContentEmail(order), user, order.Get_Order_Nr()); // prześlij zamówienie na maila
+                    bool email_sent = MailSender.Email(MailSender.ContentEmail(order), _options, order.Get_Order_Nr()); // prześlij zamówienie na maila
 
                     if(email_sent)
                     {
@@ -190,12 +214,11 @@ namespace Restaurant.UI
                             var id_order = AppService.SearchForIdInZamDatabase(db, order.Get_Order_Nr());
 
                             // dla każdego produktu przypisz wartości poszczególnym kolumną               
-                            AppService.InsertDataToProdDatabase(db, list_of_products, id_order);
+                            AppService.InsertDataToProdDatabase(db, new List<Components.Product>(), id_order);
                         }
                     }
-                }
             }
-            else // gdy lista produktów jest pusta to wyświetl okno
+            else
             {
                 MessageBox.Show("Dodaj coś do listy", "Zamówienie",
                                    MessageBoxButtons.OK,
@@ -205,7 +228,7 @@ namespace Restaurant.UI
 
         private void OnLoad(object sender, EventArgs e)
         {
-            labelCostOfOrder.Text = amount_to_pay > 0 ? "Koszt: " + amount_to_pay + "zł" : "";
+            labelCostOfOrder.Text = amountToPay > 0 ? "Koszt: " + amountToPay + "zł" : "";
             _products = _requestHandler.Send<IProductService, IEnumerable<ProductDto>>(s => s.GetAll());
             _additions = _requestHandler.Send<IAdditonService, IEnumerable<AdditionDto>>(s => s.GetAll());
             comboBoxMainDishes1.Items.AddRange(_products.Select(p => p.ProductName).ToArray());

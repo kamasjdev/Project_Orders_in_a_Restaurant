@@ -144,5 +144,10 @@ namespace Restaurant.UI
                               MessageBoxIcon.Error);
             }
         }
+
+        public static string WithTwoDecimalPoints(this decimal value)
+        {
+            return string.Format("{0:0.00}", value);
+        }
     }
 }
