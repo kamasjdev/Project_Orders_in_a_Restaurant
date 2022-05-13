@@ -150,13 +150,13 @@ namespace Restaurant.UI
         {
             if (list_of_products.Count != 0) // gdy lista produktów nie jest pusta
             {
-                User user = AppService.LoadSettings();
+                Options user = AppService.LoadSettings();
 
                 if (user != null)
                 {
                     Order order = new Order(list_of_products)
                     {
-                        Email = user.Email_to
+                       // Email = user.Email_to
                     };// stwórz zamówienie (obiekt) z listy produktów
                     
 

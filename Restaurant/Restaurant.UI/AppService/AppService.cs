@@ -171,7 +171,7 @@ namespace Restaurant.UI
             }
         }
 
-        public static User LoadSettings()
+        public static Options LoadSettings()
         {
             string email_from = "";    // zmienna określająca email nadawcy
             string email_to = "";           // zmienna określająca email odbiorcy
@@ -257,7 +257,7 @@ namespace Restaurant.UI
             login.Replace(login.ToString(), EncodeDecodeString(login.ToString(), "decode"));
             pass.Replace(pass.ToString(), EncodeDecodeString(pass.ToString(), "decode"));
 
-            return new User(email_from, email_to, smtp_klient, smtp_port, login.ToString(), pass.ToString()); // utwórz obiekt użytkownika;
+            return new Options(); // utwórz obiekt użytkownika;
         }
         #endregion
 

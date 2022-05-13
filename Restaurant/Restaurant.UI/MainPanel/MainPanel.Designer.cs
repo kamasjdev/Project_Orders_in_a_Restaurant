@@ -30,21 +30,20 @@ namespace Restaurant.UI
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainPanel));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonMenu = new System.Windows.Forms.Button();
             this.buttonCloseApp = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonSettings = new System.Windows.Forms.Button();
             this.buttonHistory = new System.Windows.Forms.Button();
-            this.buttonMenu = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.settings1 = new Restaurant.UI.Settings();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -61,6 +60,21 @@ namespace Restaurant.UI
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(200, 588);
             this.panel1.TabIndex = 0;
+            // 
+            // buttonMenu
+            // 
+            this.buttonMenu.FlatAppearance.BorderSize = 0;
+            this.buttonMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonMenu.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.buttonMenu.ForeColor = System.Drawing.Color.White;
+            this.buttonMenu.Location = new System.Drawing.Point(0, 272);
+            this.buttonMenu.Name = "buttonMenu";
+            this.buttonMenu.Size = new System.Drawing.Size(200, 80);
+            this.buttonMenu.TabIndex = 3;
+            this.buttonMenu.Text = "Menu";
+            this.buttonMenu.UseVisualStyleBackColor = true;
+            this.buttonMenu.Click += new System.EventHandler(this.ShowMenu);
             // 
             // buttonCloseApp
             // 
@@ -90,7 +104,7 @@ namespace Restaurant.UI
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Restaurant.UI.Properties.Resources.logo;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(161, 83);
@@ -128,21 +142,6 @@ namespace Restaurant.UI
             this.buttonHistory.UseVisualStyleBackColor = true;
             this.buttonHistory.Click += new System.EventHandler(this.ShowHistory);
             // 
-            // buttonMenu
-            // 
-            this.buttonMenu.FlatAppearance.BorderSize = 0;
-            this.buttonMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMenu.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.buttonMenu.ForeColor = System.Drawing.Color.White;
-            this.buttonMenu.Location = new System.Drawing.Point(0, 272);
-            this.buttonMenu.Name = "buttonMenu";
-            this.buttonMenu.Size = new System.Drawing.Size(200, 80);
-            this.buttonMenu.TabIndex = 3;
-            this.buttonMenu.Text = "Menu";
-            this.buttonMenu.UseVisualStyleBackColor = true;
-            this.buttonMenu.Click += new System.EventHandler(this.ShowMenu);
-            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -166,21 +165,12 @@ namespace Restaurant.UI
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.settings1);
             this.panel3.Location = new System.Drawing.Point(214, 68);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(841, 508);
             this.panel3.TabIndex = 2;
             // 
-            // settings1
-            // 
-            this.settings1.Location = new System.Drawing.Point(-1, -3);
-            this.settings1.Margin = new System.Windows.Forms.Padding(4);
-            this.settings1.Name = "settings1";
-            this.settings1.Size = new System.Drawing.Size(841, 507);
-            this.settings1.TabIndex = 1;
-            // 
-            // Form1
+            // MainPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -191,15 +181,15 @@ namespace Restaurant.UI
             this.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "Form1";
+            this.Name = "MainPanel";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Aplikacja";
+            this.Load += new System.EventHandler(this.OnLoad);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
-using Restaurant.Infrastructure.Requests;
 
 namespace Restaurant.UI
 {
     public partial class MainPanel : Form
     {
-        public MainPanel(Menu menu, Settings settings, History history)
+        private readonly Options _options;
+
+        public MainPanel(Menu menu, Settings settings, History history, Options options)
         {
             menu1 = menu;
             settings1 = settings;
@@ -15,7 +16,9 @@ namespace Restaurant.UI
             panel3.Controls.Add(menu1);
             panel3.Controls.Add(settings1);
             panel3.Controls.Add(history1);
-    }
+            _options = options;
+            Settings.SaveSettings += SavedSettings;
+        }
 
         private void ShowMenu(object sender, EventArgs e)
         {
@@ -23,6 +26,24 @@ namespace Restaurant.UI
             history1.Visible = false;
             menu1.Visible = true;
             menu1.BringToFront();
+        }
+
+        private void LoadSettings()
+        {
+            try
+            {
+                _options.LoadOptions();
+            }
+            catch(Exception exception)
+            {
+                exception.MapToMessageBox();
+                settings1.BringToFront();
+                settings1.Visible = true;
+                history1.Enabled = false;
+                history1.Visible = false;
+                menu1.Enabled = false;
+                menu1.Visible = false;
+            }            
         }
 
         private void ShowSettings(object sender, EventArgs e)
@@ -44,6 +65,17 @@ namespace Restaurant.UI
         private void Close(object sender, EventArgs e)
         {
             this.Dispose();
+        }
+
+        void SavedSettings(Options options)
+        {
+            history1.Enabled = true;
+            menu1.Enabled = true;
+        }
+
+        private void OnLoad(object sender, EventArgs e)
+        {
+            LoadSettings();
         }
     }
 }

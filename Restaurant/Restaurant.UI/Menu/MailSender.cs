@@ -51,12 +51,12 @@ namespace Restaurant.UI
             }
         }
       
-        public static bool Email(string message, User user, int id_order)   // funkcja odpowiada przesłanie wiadomości od nadawcy do odbiorcy
+        public static bool Email(string message, Options user, int id_order)   // funkcja odpowiada przesłanie wiadomości od nadawcy do odbiorcy
         {
             var mail = new MailMessage();   // utwórz obiekt mail klasy MailMessage
-            var smtp = new SmtpClient(user.SMTP_Client, user.SMTP_Port); // utwórz obiekt smtp klasy SmtpClient
-            mail.From = new MailAddress(user.Email_from);  // mail nadawcy
-            mail.To.Add(user.Email_to);             // mail odbiorcy
+            var smtp = new SmtpClient(user.SmtpClient, user.SmtpPort); // utwórz obiekt smtp klasy SmtpClient
+            mail.From = new MailAddress(user.Email);  // mail nadawcy
+            //mail.To.Add(user.Email_to);             // mail odbiorcy
             mail.Subject = $"Zamówienie {id_order}";            // Temat wiadomości
             mail.Body = message;                        // Treść wiadomości
             smtp.Timeout = 10000;             // timeout dla smtp 10s
