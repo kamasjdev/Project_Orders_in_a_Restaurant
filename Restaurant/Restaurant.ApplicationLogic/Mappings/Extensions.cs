@@ -9,7 +9,7 @@ namespace Restaurant.ApplicationLogic.Mappings
     {
         public static Product AsEntity(this ProductDto productDto)
         {
-            var product = new Product(productDto.Id, productDto.ProductName, productDto.Price, productDto.ProductKind);
+            var product = new Product(productDto.Id, productDto.ProductName, productDto.Price, (Domain.Entities.ProductKind) productDto.ProductKind);
             return product;
         }
 
@@ -20,7 +20,7 @@ namespace Restaurant.ApplicationLogic.Mappings
                 Id = product.Id,
                 Price = product.Price,
                 ProductName = product.ProductName,
-                ProductKind = product.ProductKind
+                ProductKind = (DTO.ProductKind) product.ProductKind
             };
 
             return productDto;
@@ -33,7 +33,7 @@ namespace Restaurant.ApplicationLogic.Mappings
                 Id = product.Id,
                 Price = product.Price,
                 ProductName = product.ProductName,
-                ProductKind = product.ProductKind,
+                ProductKind = (DTO.ProductKind) product.ProductKind,
                 Orders = product.Orders.Select(o => o.AsDto())
             };
 
@@ -114,7 +114,7 @@ namespace Restaurant.ApplicationLogic.Mappings
                 Id = addition.Id,
                 AdditionName = addition.AdditionName,
                 Price = addition.Price,
-                AdditionKind = addition.AdditionKind
+                ProductKind = (DTO.ProductKind) addition.ProductKind
             };
 
             return additionDto;

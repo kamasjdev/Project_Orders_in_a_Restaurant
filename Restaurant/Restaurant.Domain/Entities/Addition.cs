@@ -12,12 +12,12 @@ namespace Restaurant.Domain.Entities
         {
             ChangeAdditionName(name);
             ChangePrice(price);
-            AdditionKind = additionKind;
+            ProductKind = additionKind;
         }
 
         public string AdditionName { get; private set; }
         public decimal Price { get; private set; }
-        public ProductKind AdditionKind { get; set; }
+        public ProductKind ProductKind { get; set; }
 
         public void ChangeAdditionName(string additionName)
         {

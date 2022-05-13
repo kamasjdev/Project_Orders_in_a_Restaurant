@@ -33,38 +33,27 @@
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxAdditions = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.comboMainDishes2 = new System.Windows.Forms.ComboBox();
             this.listViewOrderedProducts = new System.Windows.Forms.ListView();
             this.button1 = new System.Windows.Forms.Button();
             this.labelCostOfOrder = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button3 = new System.Windows.Forms.Button();
+            this.PriceProductLabel = new System.Windows.Forms.Label();
+            this.PriceProduct = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // comboBoxMainDishes1
             // 
             this.comboBoxMainDishes1.DropDownHeight = 80;
+            this.comboBoxMainDishes1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMainDishes1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.comboBoxMainDishes1.FormattingEnabled = true;
             this.comboBoxMainDishes1.IntegralHeight = false;
-            this.comboBoxMainDishes1.Items.AddRange(new object[] {
-            "Pizza Margheritta",
-            "Pizza Tosca",
-            "Pizza Vegetariana",
-            "Pizza Venecia",
-            "Schabowy z",
-            "Ryba z frytkami",
-            "Placek po węgiersku",
-            "Zupa pomidorowa",
-            "Zupa rosół",
-            "Kawa",
-            "Herbata",
-            "Cola"});
-            this.comboBoxMainDishes1.Location = new System.Drawing.Point(132, 78);
+            this.comboBoxMainDishes1.Location = new System.Drawing.Point(96, 56);
             this.comboBoxMainDishes1.MaxDropDownItems = 2;
             this.comboBoxMainDishes1.Name = "comboBoxMainDishes1";
-            this.comboBoxMainDishes1.Size = new System.Drawing.Size(121, 24);
+            this.comboBoxMainDishes1.Size = new System.Drawing.Size(262, 24);
             this.comboBoxMainDishes1.TabIndex = 0;
             this.comboBoxMainDishes1.SelectedIndexChanged += new System.EventHandler(this.ChangedItem);
             // 
@@ -72,7 +61,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(139, 11);
+            this.label2.Location = new System.Drawing.Point(93, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(255, 17);
             this.label2.TabIndex = 2;
@@ -80,38 +69,26 @@
             // 
             // comboBoxAdditions
             // 
+            this.comboBoxAdditions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdditions.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.comboBoxAdditions.FormattingEnabled = true;
-            this.comboBoxAdditions.Location = new System.Drawing.Point(418, 77);
+            this.comboBoxAdditions.Location = new System.Drawing.Point(379, 56);
             this.comboBoxAdditions.Name = "comboBoxAdditions";
             this.comboBoxAdditions.Size = new System.Drawing.Size(121, 24);
             this.comboBoxAdditions.TabIndex = 3;
             this.comboBoxAdditions.Visible = false;
+            this.comboBoxAdditions.SelectedIndexChanged += new System.EventHandler(this.ChangedAddition);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(428, 57);
+            this.label3.Location = new System.Drawing.Point(406, 36);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(60, 17);
             this.label3.TabIndex = 4;
             this.label3.Text = "Dodatki:";
             this.label3.Visible = false;
-            // 
-            // comboMainDishes2
-            // 
-            this.comboMainDishes2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.comboMainDishes2.FormattingEnabled = true;
-            this.comboMainDishes2.Items.AddRange(new object[] {
-            "frytkami",
-            "ryżem",
-            "ziemniakami"});
-            this.comboMainDishes2.Location = new System.Drawing.Point(271, 77);
-            this.comboMainDishes2.Name = "comboMainDishes2";
-            this.comboMainDishes2.Size = new System.Drawing.Size(121, 24);
-            this.comboMainDishes2.TabIndex = 5;
-            this.comboMainDishes2.Visible = false;
             // 
             // listViewOrderedProducts
             // 
@@ -154,7 +131,7 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 1000;
+            this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.RefreshCost);
             // 
             // button3
@@ -167,16 +144,38 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.OrderRealization);
             // 
+            // PriceProductLabel
+            // 
+            this.PriceProductLabel.AutoSize = true;
+            this.PriceProductLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.PriceProductLabel.Location = new System.Drawing.Point(193, 94);
+            this.PriceProductLabel.Name = "PriceProductLabel";
+            this.PriceProductLabel.Size = new System.Drawing.Size(45, 17);
+            this.PriceProductLabel.TabIndex = 14;
+            this.PriceProductLabel.Text = "Cena:";
+            this.PriceProductLabel.Visible = false;
+            // 
+            // PriceProduct
+            // 
+            this.PriceProduct.AutoSize = true;
+            this.PriceProduct.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.PriceProduct.Location = new System.Drawing.Point(263, 94);
+            this.PriceProduct.Name = "PriceProduct";
+            this.PriceProduct.Size = new System.Drawing.Size(0, 17);
+            this.PriceProduct.TabIndex = 15;
+            this.PriceProduct.Visible = false;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.PriceProduct);
+            this.Controls.Add(this.PriceProductLabel);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.labelCostOfOrder);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listViewOrderedProducts);
-            this.Controls.Add(this.comboMainDishes2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.comboBoxAdditions);
             this.Controls.Add(this.label2);
@@ -196,12 +195,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBoxAdditions;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox comboMainDishes2;
         private System.Windows.Forms.ListView listViewOrderedProducts;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label labelCostOfOrder;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label PriceProductLabel;
+        private System.Windows.Forms.Label PriceProduct;
     }
 }

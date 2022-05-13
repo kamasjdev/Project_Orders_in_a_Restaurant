@@ -17,76 +17,52 @@ namespace Restaurant.UI
         private readonly IRequestHandler _requestHandler;
         private IEnumerable<ProductDto> _products = new List<ProductDto>();
         private IEnumerable<AdditionDto> _additions = new List<AdditionDto>();
+        private ProductDto currentProduct;
+        private AdditionDto currentAddition;
+
         public Menu(IRequestHandler requestHandler)
         {
             _requestHandler = requestHandler;
             InitializeComponent();
-            // dodanie listy produktów do kolekcji
-            products.Add("Pizza Margheritta", 20.0);
-            products.Add("Pizza Tosca", 22.0);
-            products.Add("Pizza Vegetariana", 25.0);
-            products.Add("Pizza Venecia", 25.0);
-            products.Add("Schabowy z", 30.0);
-            products.Add("Ryba z frytkami", 28.0);
-            products.Add("Placek po węgiersku", 27.0);
-            products.Add("Zupa pomidorowa", 12.0);
-            products.Add("Zupa rosół", 10.0);
-            products.Add("Kawa", 5.0);
-            products.Add("Herbata", 5.0);
-            products.Add("Cola", 5.0);
         }
 
         private void ChangedItem(object sender, EventArgs e) // funkcja wywołuje się gdy zostanie zmieniona wartość w głównych daniach daniach (comboBoxMainDishes1)
         {
-            // jeśli wybrano głowne danie z indeksu od 0 do 3 to pokaż dodatki
-            if (comboBoxMainDishes1.SelectedIndex >= 0 && comboBoxMainDishes1.SelectedIndex <= 3)
+            var currentProductName = (string) comboBoxMainDishes1.SelectedItem;
+
+            if (currentProductName is null)
             {
-                comboMainDishes2.Visible = false;
-                comboBoxAdditions.Text = "";
-                label3.Visible = true;
-                comboBoxAdditions.Items.Clear();
-                comboBoxAdditions.Items.Add("");  // jeśli przypadkiem zostanie dodany dodatek przez przypadek można wybrać puste pole
-                comboBoxAdditions.Items.Add("z podwójnym serem"); // 1
-                comboBoxAdditions.Items.Add("z salami");        // 2
-                comboBoxAdditions.Items.Add("z szynką");            // 3
-                comboBoxAdditions.Items.Add("z pieczarkami");           // 4
-                comboBoxAdditions.Visible = true;
+                return;
             }
-            else if (comboBoxMainDishes1.SelectedIndex == 4) // jeśli wybrano głowne danie z indeksu 4 to pokaż drugą część dania głowne np. frytki, zmieniaki ryż i dodatki
+
+            currentProduct = _products.Where(p => p.ProductName == currentProductName).SingleOrDefault();
+
+            if (currentProduct is null)
             {
-                comboBoxAdditions.Text = "";
-                comboMainDishes2.Text = "";
-                comboMainDishes2.Visible = true;
-                comboBoxAdditions.Text = "";
-                label3.Visible = true;
-                comboBoxAdditions.Items.Clear();
-                comboBoxAdditions.Items.Add("");   // jeśli przypadkiem zostanie dodany dodatek przez przypadek można wybrać puste pole
-                comboBoxAdditions.Items.Add("z barem sałatkowym");   // 1
-                comboBoxAdditions.Items.Add("z zestawem sosów");       // 2
-                comboBoxAdditions.Visible = true;
+                return;
             }
-            else if (comboBoxMainDishes1.SelectedIndex > 4 && comboBoxMainDishes1.SelectedIndex <= 6) // jeśli wybrano głowne danie z indeksu od 5 do 6 to pokaż dodatki
+
+            currentAddition = null;
+            var additions = _additions.Where(a => a.ProductKind == currentProduct.ProductKind).ToList();
+
+            if (additions.Any())
             {
-                comboMainDishes2.Visible = false;
                 comboBoxAdditions.Text = "";
                 label3.Visible = true;
                 comboBoxAdditions.Items.Clear();
-                comboBoxAdditions.Items.Add("");    // jeśli przypadkiem zostanie dodany dodatek przez przypadek można wybrać puste pole
-                comboBoxAdditions.Items.Add("Bar sałatkowy");       // 1
-                comboBoxAdditions.Items.Add("Zestaw sosów");        // 2
+                comboBoxAdditions.Items.AddRange(additions.Select(a => a.AdditionName).ToArray());
                 comboBoxAdditions.Visible = true;
             }
             else
             {
                 label3.Visible = false;
                 comboBoxAdditions.Visible = false;
-                comboMainDishes2.Visible = false;
             }
         }
 
         private void AddToOrder(object sender, EventArgs e) // funkcja realizująca dodanie elementu do listy zamówienia
         {
-            Product product = AppService.SelectedDish(comboBoxMainDishes1, comboMainDishes2, comboBoxAdditions, products);
+            Product product = AppService.SelectedDish(comboBoxMainDishes1, null, comboBoxAdditions, products);
             if (product != null)
             {
                 list_of_products.Add(product);     // dodaj product do listy produktów
@@ -126,6 +102,25 @@ namespace Restaurant.UI
 
         private void RefreshCost(object sender, EventArgs e) // funkcja wywołana przez timer1 (interwał co 1s)
         {
+            if (currentProduct != null)
+            {
+                var additionPrice = currentAddition != null ? currentAddition.Price : decimal.Zero;
+                var amountPrice = currentProduct.Price + additionPrice;
+                PriceProduct.Text = $"{string.Format("{0:0.00}", amountPrice)} zł";
+
+                if (amountPrice > 0)
+                {
+                    PriceProduct.Visible = true;
+                    PriceProductLabel.Visible = true;
+                }
+                else
+                {
+                    PriceProduct.Visible = false;
+                    PriceProductLabel.Visible = false;
+                }
+            }
+            
+
             amount_to_pay = 0.0; // koszt całkowity
             if (list_of_products != null) // jeśli lista produktów nie jest pusta
             {
@@ -141,10 +136,14 @@ namespace Restaurant.UI
 
         private void LoadLeftMenu(object sender, EventArgs e) // funkcja wykrywająca zmianę pozycji Visible
         {
-            if (this.Visible == true) // jeśli control user Menu jest widoczne to włącz timer
+            if (this.Visible == true)
+            {
                 timer1.Enabled = true;
-            else          // jeśli control user Menu nie jest widoczne to włącz timer
+            }
+            else
+            {
                 timer1.Enabled = false;
+            }
         }
 
         private void OrderRealization(object sender, EventArgs e)  // funkcja realizująca zamówienie, która przesyła zawartość zamówienia na adres email i wstawia wartości do tabeli SQL
@@ -192,9 +191,19 @@ namespace Restaurant.UI
             labelCostOfOrder.Text = amount_to_pay > 0 ? "Koszt: " + amount_to_pay + "zł" : "";
             _products = _requestHandler.Send<IProductService, IEnumerable<ProductDto>>(s => s.GetAll());
             _additions = _requestHandler.Send<IAdditonService, IEnumerable<AdditionDto>>(s => s.GetAll());
-            //comboBoxMainDishes1.Items.Clear();
-            comboBoxAdditions.Items.AddRange(_additions.Select(a => a.AdditionName).ToArray());
             comboBoxMainDishes1.Items.AddRange(_products.Select(p => p.ProductName).ToArray());
+        }
+
+        private void ChangedAddition(object sender, EventArgs e)
+        {
+            var currentAdditionName = (string) comboBoxAdditions.SelectedItem;
+
+            if (currentAdditionName is null)
+            {
+                return;
+            }
+
+            currentAddition = _additions.Where(a => a.AdditionName == currentAdditionName).SingleOrDefault();
         }
     }
 }

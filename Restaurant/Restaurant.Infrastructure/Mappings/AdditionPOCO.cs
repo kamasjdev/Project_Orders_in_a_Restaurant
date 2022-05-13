@@ -8,6 +8,6 @@ namespace Restaurant.Infrastructure.Mappings
         public Guid Id { get; set; }
         public string AdditionName { get; set; }
         public decimal Price { get; set; }
-        public ProductKind AdditionKind { get; set; }
+        public ProductKind ProductKind { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Restaurant.Domain.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Restaurant.ApplicationLogic.DTO
 {

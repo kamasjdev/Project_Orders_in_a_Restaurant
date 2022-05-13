@@ -1,6 +1,4 @@
-﻿using Restaurant.Domain.Entities;
-
-namespace Restaurant.ApplicationLogic.DTO
+﻿namespace Restaurant.ApplicationLogic.DTO
 {
     public class ProductDto : BaseDto
     {

@@ -84,7 +84,7 @@ namespace Restaurant.Infrastructure
 	                                            Id TEXT NOT NULL,
 	                                            AdditionName TEXT NOT NULL,
                                                 Price REAL NOT NULL,
-                                                AdditionKind INTEGER NOT NULL,
+                                                ProductKind INTEGER NOT NULL,
                                                 PRIMARY KEY (Id)
                                             );";
                 

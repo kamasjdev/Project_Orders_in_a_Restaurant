@@ -6,11 +6,8 @@ namespace Restaurant.UI
 {
     public partial class MainPanel : Form
     {
-        private readonly IRequestHandler _requestHandler;
-
-        public MainPanel(IRequestHandler requestHandler, Menu menu, Settings settings, History history)
+        public MainPanel(Menu menu, Settings settings, History history)
         {
-            _requestHandler = requestHandler;
             menu1 = menu;
             settings1 = settings;
             history1 = history;
