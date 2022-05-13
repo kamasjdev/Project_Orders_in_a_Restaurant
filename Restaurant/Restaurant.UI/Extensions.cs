@@ -7,6 +7,8 @@ namespace Restaurant.UI
 {
     internal static class Extensions
     {
+        public const string EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+
         public static Options LoadOptions(this Options options)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
@@ -82,6 +84,37 @@ namespace Restaurant.UI
         {
             byte[] data = System.Convert.FromBase64String(text);
             return System.Text.ASCIIEncoding.ASCII.GetString(data);
+        }
+
+        public static string ShowDialogEmail(string text, string caption, Func<string, bool> function)
+        {
+            Form prompt = new Form();
+            prompt.Width = 500;
+            prompt.Height = 150;
+            prompt.Text = caption;
+            prompt.FormBorderStyle = FormBorderStyle.None;
+            prompt.StartPosition = FormStartPosition.CenterParent;
+            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+            TextBox inputBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
+            Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 70 };
+            confirmation.Click += (sender, e) => {
+                var isValid = function(inputBox.Text);
+
+                if (!isValid)
+                {
+                    MessageBox.Show("Niepoprawny adres email", "Email",
+                               MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+                    return;
+                }
+
+                prompt.Close(); 
+            };
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.Controls.Add(inputBox);
+            prompt.ShowDialog();
+            return inputBox.Text;
         }
 
         public static void MapToMessageBox(this Exception exception)

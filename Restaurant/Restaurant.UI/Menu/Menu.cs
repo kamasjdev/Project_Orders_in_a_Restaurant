@@ -6,6 +6,7 @@ using Restaurant.Infrastructure.Requests;
 using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.ApplicationLogic.DTO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Restaurant.UI
 {
@@ -138,6 +139,22 @@ namespace Restaurant.UI
         {
             if (this.Visible == true)
             {
+                var email = Extensions.ShowDialogEmail("Wprowadź email", "Email", 
+                    (emailToValid) =>
+                    {
+                        if (string.IsNullOrWhiteSpace(emailToValid))
+                        {
+                            return false;
+                        }
+
+                        if (!Regex.Match(emailToValid, Extensions.EMAIL_PATTERN).Success)
+                        {
+                            return false;
+                        }
+
+                        return true;
+
+                    });
                 timer1.Enabled = true;
             }
             else
