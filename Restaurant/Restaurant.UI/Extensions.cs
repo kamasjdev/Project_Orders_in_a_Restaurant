@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Restaurant.UI.Dialog;
+using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Restaurant.UI
@@ -86,35 +88,10 @@ namespace Restaurant.UI
             return System.Text.ASCIIEncoding.ASCII.GetString(data);
         }
 
-        public static string ShowDialogEmail(string text, string caption, Func<string, bool> function)
+        public static void ShowDialog(string text, string caption, EventHandler eventHandler)
         {
-            Form prompt = new Form();
-            prompt.Width = 500;
-            prompt.Height = 150;
-            prompt.Text = caption;
-            prompt.FormBorderStyle = FormBorderStyle.None;
-            prompt.StartPosition = FormStartPosition.CenterParent;
-            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
-            TextBox inputBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
-            Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 70 };
-            confirmation.Click += (sender, e) => {
-                var isValid = function(inputBox.Text);
-
-                if (!isValid)
-                {
-                    MessageBox.Show("Niepoprawny adres email", "Email",
-                               MessageBoxButtons.OK,
-                              MessageBoxIcon.Error);
-                    return;
-                }
-
-                prompt.Close(); 
-            };
-            prompt.Controls.Add(confirmation);
-            prompt.Controls.Add(textLabel);
-            prompt.Controls.Add(inputBox);
+            Form prompt = new DialogWindow(500, 150, caption, text, eventHandler);
             prompt.ShowDialog();
-            return inputBox.Text;
         }
 
         public static void MapToMessageBox(this Exception exception)
@@ -148,6 +125,21 @@ namespace Restaurant.UI
         public static string WithTwoDecimalPoints(this decimal value)
         {
             return string.Format("{0:0.00}", value);
+        }
+
+        public static bool ValidEmail(this string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return false;
+            }
+
+            if (!Regex.Match(email, Extensions.EMAIL_PATTERN).Success)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

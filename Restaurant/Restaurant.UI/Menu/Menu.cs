@@ -6,6 +6,7 @@ using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.ApplicationLogic.DTO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Restaurant.UI.Dialog;
 
 namespace Restaurant.UI
 {
@@ -166,22 +167,7 @@ namespace Restaurant.UI
         {
             if (this.Visible == true)
             {
-                email = Extensions.ShowDialogEmail("Wprowadź email", "Email", 
-                    (emailToValid) =>
-                    {
-                        if (string.IsNullOrWhiteSpace(emailToValid))
-                        {
-                            return false;
-                        }
-
-                        if (!Regex.Match(emailToValid, Extensions.EMAIL_PATTERN).Success)
-                        {
-                            return false;
-                        }
-
-                        return true;
-
-                    });
+                Extensions.ShowDialog("Wprowadź email", "Email", ValidEmail);
                 timer1.Enabled = true;
             }
             else
@@ -189,6 +175,24 @@ namespace Restaurant.UI
                 timer1.Enabled = false;
                 productsList.Clear();
             }
+        }
+
+        private void ValidEmail(object sender, EventArgs e)
+        {
+            DialogWindow form = (DialogWindow) sender;
+            var emailToValid = form.InputBox.Text;
+            var isValid = emailToValid.ValidEmail();
+
+            if (!isValid)
+            {
+                MessageBox.Show("Niepoprawny adres email", "Email",
+                               MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+                return;
+            }
+
+            email = emailToValid;
+            form.Close();
         }
 
         private void OrderRealization(object sender, EventArgs e)  // funkcja realizująca zamówienie, która przesyła zawartość zamówienia na adres email i wstawia wartości do tabeli SQL
