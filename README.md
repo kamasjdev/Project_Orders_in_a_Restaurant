@@ -1,5 +1,12 @@
 # Projekt
-W projekcie użyto wzorzec decorator. Schemat blokowy klas przedstawiono na rysunku poniżej
+Projekt podzielono na 4 projekty. Projekt Domain przechowuje encje oraz interfejsy repozytoriów. Infrastructure jest projektem, który pobiera, modyfikuje dane z bazy danych. Główna logika aplikacji znajduje się w Application. Projekt UI ma za zadanie przedstawić dane odpowiednio przerobione przez Application użykownikowi. Do wymiany danych pomiędzy UI a Application służy interfejs IRequestHandler. W całej solucji zastosowano kontener IoC CastleWindsor. Doadatkowo projekt posiada testy integracyjne oraz jednostkowe. 
+Technologie:
+- .Net Framework 4.8
+- SQLite
+- NUnit
+- CastleWindsor
+- Dapper
+
 ![](https://raw.githubusercontent.com/kamasjdev/Projekt_Zamowienia_w_Restauracji/master/schemat_dekoratora.png)
 
 Do zapisywania zamówień wykorzystano bazę MSSQL. Baza danych została dodana lokalnie w projekcie. Ułożenie tabel pokazano na rysunku poniżej.
@@ -10,32 +17,47 @@ Do zapisywania zamówień wykorzystano bazę MSSQL. Baza danych została dodana 
 
 Poniżej przedstawiono kod do utworzenia bazy danych
 ```sql
-CREATE TABLE [dbo].[Produkty](
-	[pr_id] [int] IDENTITY(1,1) NOT NULL,
-	[pr_nazwa] [nchar](50) NOT NULL,
-	[pr_cena] [real] NOT NULL,
-	[zm_id] [int] NOT NULL,
- CONSTRAINT [PK_Produkty] PRIMARY KEY CLUSTERED 
-(
-	[pr_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-CREATE TABLE [dbo].[Zamowienia](
-	[zm_id] [int] IDENTITY(1,1) NOT NULL,
-	[zm_nr_zamowienia] [int] NOT NULL,
-	[zm_data_zamowienia] [datetime] NOT NULL,
-	[zm_koszt] [real] NOT NULL,
-	[zm_email] [nchar](50) NOT NULL,
- CONSTRAINT [PK_Zamowienia] PRIMARY KEY CLUSTERED 
-(
-	[zm_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[Produkty]  WITH CHECK ADD  CONSTRAINT [FK_Produkty_Zamowienia1] FOREIGN KEY([zm_id])
-REFERENCES [dbo].[Zamowienia] ([zm_id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[Produkty] CHECK CONSTRAINT [FK_Produkty_Zamowienia1]
+CREATE TABLE products(
+Id TEXT NOT NULL,
+ProductName TEXT NOT NULL,
+Price REAL NOT NULL,
+ProductKind INTEGER NOT NULL,
+PRIMARY KEY (Id)
+)
+
+CREATE TABLE orders (
+Id TEXT NOT NULL,
+OrderNumber TEXT NOT NULL,
+Created TEXT NOT NULL,
+Price REAL NOT NULL,
+Email TEXT NOT NULL,
+Note TEXT,
+PRIMARY KEY (Id)
+)
+
+CREATE TABLE additions (
+Id TEXT NOT NULL,
+AdditionName TEXT NOT NULL,
+Price REAL NOT NULL,
+ProductKind INTEGER NOT NULL,
+PRIMARY KEY (Id)
+)
+
+CREATE TABLE product_sales (
+Id TEXT NOT NULL,
+ProductId TEXT NOT NULL,
+OrderId TEXT,
+AdditionId TEXT,
+EndPrice REAL NOT NULL,
+Email TEXT NOT NULL,
+ProductSaleState INTEGER NOT NULL,
+CONSTRAINT FK_PRODUCTS FOREIGN KEY (ProductId) REFERENCES products,
+CONSTRAINT FK_ORDERS FOREIGN KEY (OrderId) REFERENCES orders,
+CONSTRAINT FK_ADDITIONS FOREIGN KEY (AdditionId) REFERENCES additions
+)
+
+CREATE TABLE migrations (
+Id TEXT,
+Name TEXT,
+Version INTEGER NOT NULL
+)
