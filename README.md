@@ -1,5 +1,6 @@
 # Projekt
 Projekt podzielono na 4 projekty. Projekt Domain przechowuje encje oraz interfejsy repozytoriów. Infrastructure jest projektem, który pobiera, modyfikuje dane z bazy danych. Główna logika aplikacji znajduje się w Application. Projekt UI ma za zadanie przedstawić dane odpowiednio przerobione przez Application użykownikowi. Do wymiany danych pomiędzy UI a Application służy interfejs IRequestHandler. W całej solucji zastosowano kontener IoC CastleWindsor. Doadatkowo projekt posiada testy integracyjne oraz jednostkowe. 
+
 Technologie:
 - .Net Framework 4.8
 - SQLite
