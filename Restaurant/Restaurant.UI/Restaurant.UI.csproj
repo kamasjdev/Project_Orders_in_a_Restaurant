@@ -96,30 +96,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppService\AppService.cs" />
     <Compile Include="Async\AsyncEvent.cs" />
     <Compile Include="Async\AsyncHelper.cs" />
     <Compile Include="Async\NaiveExtensions.cs" />
     <Compile Include="Async\NaiveSynchronizationContext.cs" />
-    <Compile Include="Components\Product.cs" />
-    <Compile Include="ConcreteComponents\MainCourse.cs" />
-    <Compile Include="ConcreteComponents\DrinkSoup.cs" />
-    <Compile Include="ConcreteComponents\Pizza.cs" />
-    <Compile Include="ConcreteDecorator\MainCourseSalads.cs" />
-    <Compile Include="ConcreteDecorator\MainCourseSauces.cs" />
-    <Compile Include="ConcreteDecorator\PizzaChampignons.cs" />
-    <Compile Include="ConcreteDecorator\PizzaDoubleCheese.cs" />
-    <Compile Include="ConcreteDecorator\PizzaHam.cs" />
-    <Compile Include="ConcreteDecorator\PizzaSalami.cs" />
-    <Compile Include="ConnectionDB_LINQ.cs">
-      <DependentUpon>ConnectionDB_LINQ.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="ConnectionDB_LINQ.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ConnectionDB_LINQ.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Decorator\ProductDecorator.cs" />
     <Compile Include="Dialog\DialogWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,7 +136,6 @@
     <Compile Include="Settings\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Menu\Order.cs" />
     <Compile Include="SetupApplication.cs" />
     <EmbeddedResource Include="MainPanel\MainPanel.resx">
       <DependentUpon>MainPanel.cs</DependentUpon>
@@ -175,14 +154,6 @@
     <EmbeddedResource Include="Settings\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ConnectionDB_LINQ.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>ConnectionDB_LINQ.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ConnectionDB_LINQ.dbml.layout">
-      <DependentUpon>ConnectionDB_LINQ.dbml</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -202,15 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Database_of_Restaurants.mdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Database_of_Restaurants_log.ldf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DependentUpon>Database_of_Restaurants.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
