@@ -7,11 +7,12 @@ Technologie:
 - CastleWindsor
 - Dapper
 
-![](https://raw.githubusercontent.com/kamasjdev/Projekt_Zamowienia_w_Restauracji/master/schemat_dekoratora.png)
+Schemat projektu
+![](https://raw.githubusercontent.com/kamasjdev/Project_Orders_in_a_Restaurant/master/projects_app.jpg)
 
-Do zapisywania zamówień wykorzystano bazę MSSQL. Baza danych została dodana lokalnie w projekcie. Ułożenie tabel pokazano na rysunku poniżej.
+Do zapisywania zamówień wykorzystano bazę SQLite. Baza danych została dodana lokalnie w projekcie. Ułożenie tabel pokazano na rysunku poniżej.
 
-![](https://raw.githubusercontent.com/kamasjdev/Projekt_Zamowienia_w_Restauracji/master/schemat_bazy_danych.png)
+![](https://raw.githubusercontent.com/kamasjdev/Project_Orders_in_a_Restaurant/master/schemat_bazy_danych.png)
 
 
 
