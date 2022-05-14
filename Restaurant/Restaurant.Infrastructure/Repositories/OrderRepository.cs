@@ -21,7 +21,7 @@ namespace Restaurant.Infrastructure.Repositories
 
         public Guid Add(Order entity)
         {
-            var sql = "INSERT INTO orders (Id, OrderNumber, Created, Price, Email) VALUES (@Id, @OrderNumber, @Created, @Price, @Email)";
+            var sql = "INSERT INTO orders (Id, OrderNumber, Created, Price, Email, Note) VALUES (@Id, @OrderNumber, @Created, @Price, @Email, @Note)";
             _dbConnection.Execute(sql, entity);
             return entity.Id;
         }
@@ -30,6 +30,14 @@ namespace Restaurant.Infrastructure.Repositories
         {
             var sql = "DELETE FROM orders WHERE Id = @Id";
             _dbConnection.Execute(sql, new { Id = id });
+        }
+
+        public void DeleteWithPositions(IEnumerable<Guid> ids)
+        {
+            var sqlProductSales = "DELETE FROM product_sales WHERE OrderId IN @Ids";
+            _dbConnection.Execute(sqlProductSales, new { Ids = ids });
+            var sqlOrders = "DELETE FROM orders WHERE Id IN @Ids";
+            _dbConnection.Execute(sqlOrders, new { Ids = ids });
         }
 
         public Order Get(Guid id)

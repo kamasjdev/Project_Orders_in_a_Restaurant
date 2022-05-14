@@ -19,6 +19,9 @@ namespace Restaurant.UI
             panel3.Controls.Add(history1);
             _options = options;
             Settings.SaveSettings += SavedSettings;
+            menu1.Visible = true;
+            settings1.Visible = false;
+            history1.Visible = false;
         }
 
         private void ShowMenu(object sender, EventArgs e)
@@ -37,7 +40,7 @@ namespace Restaurant.UI
             }
             catch(Exception exception)
             {
-                exception.MapToMessageBox();
+                exception.MapToMessageBox("Wczytywanie pliku");
                 settings1.BringToFront();
                 settings1.Visible = true;
                 history1.Enabled = false;

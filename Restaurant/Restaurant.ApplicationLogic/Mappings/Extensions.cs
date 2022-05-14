@@ -54,7 +54,8 @@ namespace Restaurant.ApplicationLogic.Mappings
                 Email = order.Email.Value,
                 OrderNumber = order.OrderNumber,
                 Created = order.Created,
-                Price = order.Price
+                Price = order.Price,
+                Note = order.Note
             };
 
             return orderDto;

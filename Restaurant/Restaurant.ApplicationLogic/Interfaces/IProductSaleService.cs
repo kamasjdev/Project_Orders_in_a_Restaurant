@@ -1,5 +1,6 @@
 ﻿using Restaurant.ApplicationLogic.DTO;
 using System;
+using System.Collections.Generic;
 
 namespace Restaurant.ApplicationLogic.Interfaces
 {
@@ -7,5 +8,6 @@ namespace Restaurant.ApplicationLogic.Interfaces
     {
         Guid Add(ProductSaleDto productSaleDto);
         void Update(ProductSaleDto productSaleDto);
+        IEnumerable<ProductSaleDto> GetAllByOrderId(Guid orderId);
     }
 }

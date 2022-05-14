@@ -54,6 +54,7 @@ namespace Restaurant.ApplicationLogic.Implementation
                 {
                     productSale.OrderId = id;
                     productSale.Id = Guid.NewGuid();
+                    productSale.ProductSaleState = ProductSaleState.Ordered;
                     _productSaleRepository.Add(productSale.AsEntity());
                 }
 
@@ -70,6 +71,11 @@ namespace Restaurant.ApplicationLogic.Implementation
         public void Delete(Guid id)
         {
             _orderRepository.Delete(id);
+        }
+
+        public void DeleteWithPositions(IEnumerable<Guid> ids)
+        {
+            _orderRepository.DeleteWithPositions(ids);
         }
 
         public OrderDetailsDto Get(Guid id)

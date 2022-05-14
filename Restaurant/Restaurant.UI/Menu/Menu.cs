@@ -5,11 +5,9 @@ using Restaurant.Infrastructure.Requests;
 using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.ApplicationLogic.DTO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Restaurant.UI.Dialog;
 using System.Threading.Tasks;
 using Restaurant.UI.Async;
-using Castle.Core.Smtp;
 using Restaurant.ApplicationLogic.Mail;
 
 namespace Restaurant.UI
@@ -24,6 +22,7 @@ namespace Restaurant.UI
         private ProductDto currentProduct;
         private AdditionDto currentAddition;
         private string email;
+        private string notes;
 
         public Menu(IRequestHandler requestHandler)
         {
@@ -184,6 +183,13 @@ namespace Restaurant.UI
             }
         }
 
+        private void AddNotes(object sender, EventArgs e)
+        {
+            DialogWindow form = (DialogWindow) sender;
+            notes = form.InputBox.Text;
+            form.Close();
+        }
+
         private void ValidEmail(object sender, EventArgs e)
         {
             DialogWindow form = (DialogWindow) sender;
@@ -212,12 +218,15 @@ namespace Restaurant.UI
                   return;
             }
 
+            Extensions.ShowDialog("Wprowadź uwagi do zamówienia", "Uwagi", AddNotes);
+
             try
             {
                 var order = new OrderDetailsDto()
                 {
                     Price = amountToPay,
-                    Email = email
+                    Email = email,
+                    Note = notes
                 };
 
                 foreach (var product in productSalesList)
@@ -242,9 +251,7 @@ namespace Restaurant.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Wystąpił błąd podczas realizacji zamówienia", "Zamówienie",
-                           MessageBoxButtons.OK,
-                          MessageBoxIcon.Error);
+                ex.MapToMessageBox("Zamówienie");
             }
         }
 

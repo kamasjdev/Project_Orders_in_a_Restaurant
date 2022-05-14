@@ -50,6 +50,15 @@ namespace Restaurant.UI
                 messageBody.Append(endTr);
             }
             messageBody.Append(endTable);
+            messageBody.Append("<br/>");
+            messageBody.Append("<h5>");
+            messageBody.Append("Uwagi:");
+            messageBody.Append("</h5>");
+            messageBody.Append("<br/>");
+            messageBody.Append("<h5>");
+            messageBody.Append(order.Note);
+            messageBody.Append("</h5>");
+            messageBody.Append("<br/>");
             messageBody.AppendLine("\n<font>Koszt : " + order.Price + " zł" +  "</font>");
             return messageBody.ToString();
         }

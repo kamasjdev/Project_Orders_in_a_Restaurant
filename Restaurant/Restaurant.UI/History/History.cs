@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using Restaurant.ApplicationLogic.DTO;
+using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.Infrastructure.Requests;
 
 namespace Restaurant.UI
 {
     public partial class History : UserControl
     {
-        private ConnectionDB_LINQDataContext dc = new ConnectionDB_LINQDataContext();
         private readonly IRequestHandler _requestHandler;
 
         public History(IRequestHandler requestHandler)
@@ -16,60 +18,91 @@ namespace Restaurant.UI
             InitializeComponent();
         }
 
-        private void Details(object sender, EventArgs e)     // funkcja pokazująca szczegóły zamówienia
+        private void Details(object sender, EventArgs e)
         {
-            Int32 selectedCellCount = showOrders.GetCellCount(DataGridViewElementStates.Selected);  // wybrana ilość komórek
-            if (selectedCellCount == 1)                         // gdy wybrana jest tylko 1 komórka
+            Int32 selectedCellCount = showOrders.GetCellCount(DataGridViewElementStates.Selected);
+            if (selectedCellCount == 1)
             {
                 showDetailsofOrder.Visible = true;                   
-                int selected_row = showOrders.SelectedCells[0].RowIndex;                 // wybrany wiersz
-                DataGridViewRow selectedRow = showOrders.Rows[selected_row];             // kolekcja wszystkich komórek w wierszu
-                int index_searched = (int)selectedRow.Cells[0].Value;                       // indeks wybranego wiersza
-
-                var record = AppService.ShowRecordsInProdDatabase(dc, index_searched);
-
-                showDetailsofOrder.DataSource = record;   // przekaż wyniki record (IQueryable) do showDetailsofOrder
+                int selectedIndex = showOrders.SelectedCells[0].RowIndex;
+                DataGridViewRow selectedRow = showOrders.Rows[selectedIndex];
+                var orderId = (Guid)selectedRow.Cells["Id"].Value;
+                var products = _requestHandler.Send<IProductSaleService, IEnumerable<ProductSaleDto>>(p => p.GetAllByOrderId(orderId));
+                showDetailsofOrder.DataSource = products.ToList();
+                showDetailsofOrder.Columns["Id"].DisplayIndex = 0;
+                showDetailsofOrder.Columns["EndPrice"].HeaderText = "Cena końcowa [zł]";
+                showDetailsofOrder.Columns["EndPrice"].DisplayIndex = 1;
+                showDetailsofOrder.Columns["Email"].HeaderText = "Email";
+                showDetailsofOrder.Columns["Email"].DisplayIndex = 2;
+                showDetailsofOrder.Columns["ProductSaleState"].HeaderText = "Status";
+                showDetailsofOrder.Columns["ProductSaleState"].DisplayIndex = 3;
+                showDetailsofOrder.Columns["Product"].HeaderText = "Produkt";
+                showDetailsofOrder.Columns["Product"].DisplayIndex = 3;
+                showDetailsofOrder.Columns["ProductId"].HeaderText = "Id produktu";
+                showDetailsofOrder.Columns["ProductId"].DisplayIndex = 4;
+                showDetailsofOrder.Columns["Addition"].HeaderText = "Dodatek";
+                showDetailsofOrder.Columns["Addition"].DisplayIndex = 5;
+                showDetailsofOrder.Columns["AdditionId"].HeaderText = "Id dodatku";
+                showDetailsofOrder.Columns["AdditionId"].DisplayIndex = 6;
+                showDetailsofOrder.Columns["OrderId"].HeaderText = "Id zamówienia";
+                showDetailsofOrder.Columns["OrderId"].DisplayIndex = 7;
             }
         }
 
-        private void DeleteOrderFromDB(object sender, EventArgs e)   // funkcja pozwalająca na usunięcie rekordu z bazy danych
+        private void DeleteOrderFromDB(object sender, EventArgs e)
         {
-            Int32 selectedCellCount = showOrders.GetCellCount(DataGridViewElementStates.Selected); // wybrana ilość komórek
-            if (selectedCellCount > 0)           // gdy wybrano komórkę/komórki
+            Int32 selectedCellCount = showOrders.GetCellCount(DataGridViewElementStates.Selected);
+            if (selectedCellCount > 0)
             {
-                var confirm_delete_data = MessageBox.Show("Czy chcesz usunąć danie", "Usuń danie",
+                var confirmDeleteData = MessageBox.Show("Czy chcesz usunąć zamówienie", "Usuń zamówienie",
                                MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Question);         // wyświetla okienko informacyjne o potwierdzeenie usunięcia danych
+                                 MessageBoxIcon.Question);
 
-                if (confirm_delete_data == DialogResult.Yes)  // jeśli tak to
+                if (confirmDeleteData == DialogResult.No)
                 {
-                    List<int> indexes_to_delete = new List<int>();   // lista indeksów danych
-                    for (int i =0; i< selectedCellCount; i++)      // pętla która dodaje indeksy do listy
-                    {
-                        int selected_row = showOrders.SelectedCells[i].RowIndex;
-                        DataGridViewRow selectedRow = showOrders.Rows[selected_row];
-                        indexes_to_delete.Add((int)selectedRow.Cells[0].Value);    // dodawanie indeksów do listy
-                    }
-
-                    AppService.DeleteNRecords(dc, indexes_to_delete);
-
-                    // odświeżanie rekordów w tabeli
-                    var results = AppService.ShowRecordsInZamDatabase(dc);
-                    showOrders.DataSource = results; // przekaż wyniki results (IQueryable) do showOrders
-                    showDetailsofOrder.Visible = false; // schowaj tabelę showDetailsofOrder
-                }
-                else
                     return;
+                }
+
+                List<Guid> orderIds = new List<Guid>();
+                for (int i =0; i< selectedCellCount; i++)
+                {
+                    int selected_row = showOrders.SelectedCells[i].RowIndex;
+                    DataGridViewRow selectedRow = showOrders.Rows[selected_row];
+                    orderIds.Add((Guid)selectedRow.Cells["Id"].Value);
+                }
+
+                _requestHandler.Send<IOrderService>(o => o.DeleteWithPositions(orderIds));
+
+                var results = _requestHandler.Send<IOrderService, IEnumerable<OrderDto>>(o => o.GetAll());
+                LoadOrdersToDataGrid(results.ToList());
+                showDetailsofOrder.Visible = false;
             }
         }
 
-        private void LoadLeftHistory(object sender, EventArgs e)       // funkcja wykrywająca zmianę pozycji Visible
+        private void LoadLeftHistory(object sender, EventArgs e)
         {
-            if (this.Visible == true) // jeśli Visible jest true to pokaż rekordy z tabeli Zamówienia
+            if (this.Visible == true)
             {
-                var results = AppService.ShowRecordsInZamDatabase(dc);
-                showOrders.DataSource = results; // przekaż wyniki results (IQueryable) do showOrders
+                var results = _requestHandler.Send<IOrderService, IEnumerable<OrderDto>>(o => o.GetAll());
+                LoadOrdersToDataGrid(results.ToList());
             }
+        }
+
+        private void LoadOrdersToDataGrid(IList<OrderDto> orders)
+        {
+            showOrders.DataSource = orders;
+            showOrders.Columns["Id"].DisplayIndex = 0;
+            showOrders.Columns["OrderNumber"].HeaderText = "Numer zamówienia";
+            showOrders.Columns["OrderNumber"].DisplayIndex = 1;
+            showOrders.Columns["Created"].HeaderText = "Data utworzenia";
+            showOrders.Columns["Created"].DisplayIndex = 2;
+            showOrders.Columns["Price"].HeaderText = "Koszt [zł]";
+            showOrders.Columns["Price"].DisplayIndex = 3;
+            showOrders.Columns["Email"].HeaderText = "Email";
+            showOrders.Columns["Email"].DisplayIndex = 4;
+            showOrders.Columns["Note"].HeaderText = "Uwagi";
+            showOrders.Columns["Note"].DisplayIndex = 5;
+
         }
     }
 }

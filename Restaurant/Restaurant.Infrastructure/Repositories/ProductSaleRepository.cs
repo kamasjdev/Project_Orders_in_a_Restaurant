@@ -34,8 +34,8 @@ namespace Restaurant.Infrastructure.Repositories
 
         public ProductSale Get(Guid id)
         {
-            var sql = @"SELECT p.*, ps.*, a.*, o.* FROM product_sales ps
-                        LEFT JOIN product p ON ps.ProductId = p.Id
+            var sql = @"SELECT ps.*, p.*, a.*, o.* FROM product_sales ps
+                        LEFT JOIN products p ON ps.ProductId = p.Id
                         LEFT JOIN additions a on ps.AdditionId = a.Id
                         LEFT JOIN orders o ON o.Id = ps.OrderId
                         WHERE p.Id = @Id";
@@ -66,6 +66,25 @@ namespace Restaurant.Infrastructure.Repositories
         {
             var sql = "SELECT * FROM product_sales";
             var result = _dbConnection.Query<ProductSalePOCO>(sql);
+            return result.Select(p => p.AsEntity()).ToList();
+        }
+
+        public IEnumerable<ProductSale> GetAllByOrderId(Guid orderId)
+        {
+            var sql = @"SELECT ps.*, p.*, a.* FROM product_sales ps
+                        JOIN products p ON ps.ProductId = p.Id
+                        LEFT JOIN additions a on ps.AdditionId = a.Id
+                        WHERE OrderId = @OrderId";
+            var result = _dbConnection.Query<ProductSalePOCO, ProductPOCO, AdditionPOCO, ProductSalePOCO>(sql,
+                (productSale, product, addition) => {
+                    if (addition != null && addition.Id != Guid.Empty)
+                    {
+                        productSale.Addition = addition;
+                    }
+                    productSale.Product = product;
+                    return productSale;
+                },
+                new { OrderId = orderId });
             return result.Select(p => p.AsEntity()).ToList();
         }
 

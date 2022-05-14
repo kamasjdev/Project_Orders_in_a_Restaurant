@@ -1,7 +1,10 @@
 ﻿using Restaurant.ApplicationLogic.DTO;
 using Restaurant.ApplicationLogic.Interfaces;
+using Restaurant.ApplicationLogic.Mappings;
 using Restaurant.Domain.Repositories;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Restaurant.ApplicationLogic.Implementation
 {
@@ -16,12 +19,20 @@ namespace Restaurant.ApplicationLogic.Implementation
 
         public Guid Add(ProductSaleDto productSaleDto)
         {
-            throw new NotImplementedException();
+            productSaleDto.Id = Guid.NewGuid();
+            var id = _productSaleRepository.Add(productSaleDto.AsEntity());
+            return id;
         }
 
         public void Update(ProductSaleDto productSaleDto)
         {
-            throw new NotImplementedException();
+            _productSaleRepository.Update(productSaleDto.AsEntity());
+        }
+
+        public IEnumerable<ProductSaleDto> GetAllByOrderId(Guid orderId)
+        {
+            var products = _productSaleRepository.GetAllByOrderId(orderId);
+            return products.Select(p => p.AsDto());
         }
     }
 }

@@ -12,5 +12,6 @@ namespace Restaurant.ApplicationLogic.Interfaces
         Guid Add(OrderDetailsDto orderDetailsDto);
         void Update(OrderDto order);
         void Delete(Guid id);
+        void DeleteWithPositions(IEnumerable<Guid> ids);
     }
 }

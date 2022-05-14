@@ -95,29 +95,29 @@ namespace Restaurant.UI
             prompt.ShowDialog();
         }
 
-        public static void MapToMessageBox(this Exception exception)
+        public static void MapToMessageBox(this Exception exception, string context)
         {
             if (exception.GetType() == typeof(FileLoadException))
             {
-                MessageBox.Show(exception.Message, "Błąd wczytywania pliku",
+                MessageBox.Show(exception.Message, context,
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Error);
             }
             else if (exception.GetType() == typeof(FileNotFoundException))
             {
-                MessageBox.Show(exception.Message, "Nie znaleziono pliku",
+                MessageBox.Show(exception.Message, context,
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Error);
             }
             else if (exception.GetType() == typeof(InvalidOperationException))
             {
-                MessageBox.Show(exception.Message, "Nie znaleziono pliku",
+                MessageBox.Show(exception.Message, context,
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Coś poszło nie tak", "Nie znaleziono pliku",
+                MessageBox.Show("Coś poszło nie tak", context,
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Error);
             }
