@@ -8,6 +8,7 @@ Technologie:
 - Dapper
 
 Schemat projektu
+
 ![](https://raw.githubusercontent.com/kamasjdev/Project_Orders_in_a_Restaurant/master/projects_app.jpg)
 
 Do zapisywania zamówień wykorzystano bazę SQLite. Baza danych została dodana lokalnie w projekcie. Ułożenie tabel pokazano na rysunku poniżej.
