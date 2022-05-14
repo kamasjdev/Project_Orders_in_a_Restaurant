@@ -97,6 +97,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppService\AppService.cs" />
+    <Compile Include="Async\AsyncEvent.cs" />
+    <Compile Include="Async\AsyncHelper.cs" />
+    <Compile Include="Async\NaiveExtensions.cs" />
+    <Compile Include="Async\NaiveSynchronizationContext.cs" />
     <Compile Include="Components\Product.cs" />
     <Compile Include="ConcreteComponents\MainCourse.cs" />
     <Compile Include="ConcreteComponents\DrinkSoup.cs" />
@@ -132,7 +136,7 @@
     <Compile Include="History\History.Designer.cs">
       <DependentUpon>History.cs</DependentUpon>
     </Compile>
-    <Compile Include="Menu\MailSender.cs" />
+    <Compile Include="Menu\MailExtensions.cs" />
     <Compile Include="Menu\Menu.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -152,7 +156,6 @@
     <Compile Include="Settings\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Options.cs" />
     <Compile Include="Menu\Order.cs" />
     <Compile Include="SetupApplication.cs" />
     <EmbeddedResource Include="MainPanel\MainPanel.resx">

@@ -70,7 +70,7 @@ namespace Restaurant.ApplicationLogic.Mappings
                 Created = order.Created,
                 Price = order.Price,
                 Note = order.Note,
-                Products = order.Products.Select(p => p.AsDto())
+                Products = order.Products.Select(p => p.AsDto()).ToList()
             };
 
             return orderDto;
@@ -81,12 +81,24 @@ namespace Restaurant.ApplicationLogic.Mappings
             var productSaleDto = new ProductSaleDto()
             {
                 Id = productSale.Id,
-                Addition = productSale.Addition.AsDto(),
+                Addition = productSale.Addition?.AsDto(),
+                AdditionId = productSale.Addition?.Id,
+                Email = productSale.Email.Value,
                 EndPrice = productSale.EndPrice,
                 OrderId = productSale.OrderId,
                 Product = productSale.Product.AsDto(),
-                ProductSaleState = productSale.ProductSaleState
+                ProductId = productSale.ProductId,
+                ProductSaleState = (DTO.ProductSaleState) productSale.ProductSaleState
             };
+
+            return productSaleDto;
+        }
+
+        public static ProductSale AsEntity(this ProductSaleDto productSale)
+        {
+            var productSaleDto = new ProductSale(productSale.Id, productSale.Product.AsEntity(),
+                        (Domain.Entities.ProductSaleState) productSale.ProductSaleState, Email.Of(productSale.Email),
+                        productSale.Addition?.AsEntity(), productSale.OrderId);
 
             return productSaleDto;
         }
@@ -97,10 +109,13 @@ namespace Restaurant.ApplicationLogic.Mappings
             {
                 Id = productSale.Id,
                 Addition = productSale.Addition.AsDto(),
+                AdditionId = productSale.Addition?.Id,
+                Email = productSale.Email.Value,
                 EndPrice = productSale.EndPrice,
                 OrderId = productSale.OrderId,
                 Product = productSale.Product.AsDto(),
-                ProductSaleState = productSale.ProductSaleState,
+                ProductId = productSale.ProductId,
+                ProductSaleState = (DTO.ProductSaleState) productSale.ProductSaleState,
                 Order = productSale.Order.AsDto()
             };
 
@@ -117,6 +132,12 @@ namespace Restaurant.ApplicationLogic.Mappings
                 ProductKind = (DTO.ProductKind) addition.ProductKind
             };
 
+            return additionDto;
+        }
+
+        public static Addition AsEntity(this AdditionDto addition)
+        {
+            var additionDto = new Addition(addition.Id, addition.AdditionName, addition.Price, (Domain.Entities.ProductKind) addition.ProductKind);
             return additionDto;
         }
     }

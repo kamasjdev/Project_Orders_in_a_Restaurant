@@ -23,6 +23,7 @@ namespace Restaurant.Infrastructure
             container.Register(Component.For<IOrderRepository>().ImplementedBy<OrderRepository>().LifestyleScoped());
             container.Register(Component.For<IProductRepository>().ImplementedBy<ProductRepository>().LifestyleScoped());
             container.Register(Component.For<IAdditonRepository>().ImplementedBy<AdditonRepository>().LifestyleScoped());
+            container.Register(Component.For<IProductSaleRepository>().ImplementedBy<ProductSaleRepository>().LifestyleScoped());
             container.AddDbConnection(appSettings);
             container.Register(Component.For<IRequestHandler>()
                         .UsingFactoryMethod(factory =>

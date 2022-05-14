@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Restaurant.ApplicationLogic.Interfaces;
+using System;
 using System.Text.RegularExpressions;
 
-namespace Restaurant.UI
+namespace Restaurant.ApplicationLogic.Mail
 {
-    public sealed class Options 
+    internal sealed class Options : IOptions
     {
         private const string EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
         private string _email;

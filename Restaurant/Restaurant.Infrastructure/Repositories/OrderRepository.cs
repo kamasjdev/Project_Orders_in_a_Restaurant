@@ -85,6 +85,19 @@ namespace Restaurant.Infrastructure.Repositories
             return result.Select(o => o.AsEntity()).ToList();
         }
 
+        public Order GetLatestOrderOnDateAsync(DateTime currentDate)
+        {
+            var sql = @"SELECT o.* FROM orders o
+                        WHERE Datetime(o.Created) > @CurrentDate
+                        ORDER BY o.Created DESC
+                        LIMIT 1";
+            var result = _dbConnection.Query<OrderPOCO>(sql, new
+            {
+                CurrentDate = currentDate.Date
+            }).SingleOrDefault();
+            return result?.AsEntity();
+        }
+
         public void Update(Order entity)
         {
             var sql = "UPDATE orders SET OrderNumber = @OrderNumber, Created = @Created, Price = @Price, Email = @Email WHERE Id = @Id";

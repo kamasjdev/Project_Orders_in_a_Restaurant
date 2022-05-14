@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.Domain.Entities;
 using Restaurant.Domain.Repositories;
 using Restaurant.Infrastructure.Mappings;
@@ -10,13 +11,12 @@ using System.Linq;
 namespace Restaurant.Infrastructure.Repositories
 {
     internal class AdditonRepository : IAdditonRepository
-
     {
         private readonly IDbConnection _dbConnection;
 
-        public AdditonRepository(IDbConnection dbConnection)
+        public AdditonRepository(IUnitOfWork unitOfWork)
         {
-            _dbConnection = dbConnection;
+            _dbConnection = unitOfWork.Connection;
         }
 
         public Guid Add(Addition entity)

@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Restaurant.ApplicationLogic.Interfaces;
+using System;
 using System.Windows.Forms;
 
 namespace Restaurant.UI
 {
     public partial class MainPanel : Form
     {
-        private readonly Options _options;
+        private readonly IOptions _options;
 
-        public MainPanel(Menu menu, Settings settings, History history, Options options)
+        public MainPanel(Menu menu, Settings settings, History history, IOptions options)
         {
             menu1 = menu;
             settings1 = settings;
@@ -67,7 +68,7 @@ namespace Restaurant.UI
             this.Dispose();
         }
 
-        void SavedSettings(Options options)
+        void SavedSettings(IOptions options)
         {
             history1.Enabled = true;
             menu1.Enabled = true;

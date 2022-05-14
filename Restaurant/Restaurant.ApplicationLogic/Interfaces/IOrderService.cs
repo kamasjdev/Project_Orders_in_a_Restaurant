@@ -4,11 +4,12 @@ using System;
 
 namespace Restaurant.ApplicationLogic.Interfaces
 {
-    public interface IOrderService
+    public interface IOrderService : IService
     {
         OrderDetailsDto Get(Guid id);
         IEnumerable<OrderDto> GetAll();
         Guid Add(OrderDto order);
+        Guid Add(OrderDetailsDto orderDetailsDto);
         void Update(OrderDto order);
         void Delete(Guid id);
     }

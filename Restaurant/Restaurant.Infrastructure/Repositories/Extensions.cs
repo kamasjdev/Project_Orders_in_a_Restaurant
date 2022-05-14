@@ -44,6 +44,14 @@ namespace Restaurant.Infrastructure.Repositories
             return productSale;
         }
 
+        public static ProductSale AsDetailsEntity(this ProductSalePOCO productSalePOCO)
+        {
+            var productSale = new ProductSale(productSalePOCO.Id, productSalePOCO.Product.AsEntity(),
+                productSalePOCO.ProductSaleState, Email.Of(productSalePOCO.Email), productSalePOCO.Addition?.AsEntity(),
+                productSalePOCO.OrderId, productSalePOCO.Order.AsEntity());
+            return productSale;
+        }
+
         public static Addition AsEntity(this AdditionPOCO additionPOCO)
         {
             var addition = new Addition(additionPOCO.Id, additionPOCO.AdditionName, additionPOCO.Price, additionPOCO.ProductKind);

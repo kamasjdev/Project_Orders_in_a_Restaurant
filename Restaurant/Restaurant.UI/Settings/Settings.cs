@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Restaurant.ApplicationLogic.Interfaces;
+using System;
 using System.Windows.Forms;
 
 namespace Restaurant.UI
 {
     public partial class Settings : UserControl
     {
-        private readonly Options _options;
+        private readonly IOptions _options;
         private string field;
-        public delegate void OptionsSaved(Options options);
+        public delegate void OptionsSaved(IOptions options);
 
         public static event OptionsSaved SaveSettings;
 
-        public Settings(Options options)
+        public Settings(IOptions options)
         {
             InitializeComponent();
             _options = options;

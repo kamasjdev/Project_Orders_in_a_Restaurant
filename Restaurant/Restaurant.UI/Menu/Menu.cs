@@ -7,26 +7,27 @@ using Restaurant.ApplicationLogic.DTO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Restaurant.UI.Dialog;
+using System.Threading.Tasks;
+using Restaurant.UI.Async;
+using Castle.Core.Smtp;
+using Restaurant.ApplicationLogic.Mail;
 
 namespace Restaurant.UI
 {
     public partial class Menu : UserControl
     {
-        private readonly List<ProductDto> productsList = new List<ProductDto>();
-        private readonly List<AdditionDto> additionsList = new List<AdditionDto>();
+        private readonly List<ProductSaleDto> productSalesList = new List<ProductSaleDto>();
         decimal amountToPay = decimal.Zero;
         private readonly IRequestHandler _requestHandler;
         private IEnumerable<ProductDto> _products = new List<ProductDto>();
         private IEnumerable<AdditionDto> _additions = new List<AdditionDto>();
         private ProductDto currentProduct;
         private AdditionDto currentAddition;
-        private readonly Options _options;
         private string email;
 
-        public Menu(IRequestHandler requestHandler, Options options)
+        public Menu(IRequestHandler requestHandler)
         {
             _requestHandler = requestHandler;
-            _options = options;
             InitializeComponent();
         }
 
@@ -68,18 +69,25 @@ namespace Restaurant.UI
         {
             var product = _products.Where(p => p.ProductName == (string) comboBoxMainDishes1.SelectedItem).SingleOrDefault();
 
+            var productSale = new ProductSaleDto() { Id = Guid.NewGuid(), Email = email, EndPrice = decimal.Zero };
             if (product != null)
             {
-                productsList.Add(product);
-                listViewOrderedProducts.Items.Add(product.ToString());
+                productSale.Product = product;
+                productSale.ProductSaleState = ProductSaleState.New;
+                productSale.EndPrice += product.Price;
+                listViewOrderedProducts.Items.Add(productSale.Id.ToString(), product.ToString(), -1);
+                productSalesList.Add(productSale);
             }
 
             var addition = _additions.Where(a => a.AdditionName == (string)comboBoxAdditions.SelectedItem).SingleOrDefault();
 
             if (addition != null)
             {
-                additionsList.Add(addition);
-                listViewOrderedProducts.Items.Add(addition.ToString());
+                productSale.Addition = addition;
+                productSale.Addition.Id = addition.Id;
+                productSale.EndPrice += addition.Price;
+                listViewOrderedProducts.Items.Add(productSale.Id.ToString(), addition.ToString(), -1);
+                comboBoxAdditions.SelectedIndex = comboBoxAdditions.Items.IndexOf("test1");
             }
         }
 
@@ -104,19 +112,26 @@ namespace Restaurant.UI
                         {
                             int selectedindex = listViewOrderedProducts.SelectedIndices[i];
                             var item = listViewOrderedProducts.Items[selectedindex].Text;
+                            var key = listViewOrderedProducts.Items[selectedindex].Name;
+                            var id = new Guid(key);
                             listViewOrderedProducts.Items.RemoveAt(selectedindex);
                             
-                            var product = productsList.Where(p => p.ProductName == item).FirstOrDefault();
+                            var product = _products.Where(p => p.ProductName == item).FirstOrDefault();
+                            var productSale = productSalesList.Where(p => p.Id == id).SingleOrDefault();
                             if (product != null)
                             {
-                                productsList.Remove(product);
+                                var itemToRemove = listViewOrderedProducts.Items[key];
+                                listViewOrderedProducts.Items.Remove(itemToRemove);
+                                productSalesList.Remove(productSale);
                                 continue;
                             }
 
-                            var addition = additionsList.Where(a => a.AdditionName == item).FirstOrDefault();
+                            var addition = _additions.Where(a => a.AdditionName == item).FirstOrDefault();
                             if (addition != null)
                             {
-                                additionsList.Remove(addition);
+                                productSale.Addition = null;
+                                productSale.AdditionId = null;
+                                productSale.EndPrice -= addition.Price;
                                 continue;
                             }
                         }
@@ -144,20 +159,12 @@ namespace Restaurant.UI
                     PriceProductLabel.Visible = false;
                 }
             }
-            
 
             amountToPay = decimal.Zero;
 
-            if (productsList != null)
+            foreach (ProductSaleDto productSale in productSalesList)
             {
-                foreach (ProductDto p in productsList)
-                {
-                    amountToPay += p.Price;
-                }
-            }
-            else
-            {
-                amountToPay = decimal.Zero;
+                amountToPay += productSale.EndPrice;
             }
 
             labelCostOfOrder.Text = "Koszt: " + amountToPay.WithTwoDecimalPoints() + "zł";
@@ -173,7 +180,7 @@ namespace Restaurant.UI
             else
             {
                 timer1.Enabled = false;
-                productsList.Clear();
+                productSalesList.Clear();
             }
         }
 
@@ -197,36 +204,47 @@ namespace Restaurant.UI
 
         private void OrderRealization(object sender, EventArgs e)  // funkcja realizująca zamówienie, która przesyła zawartość zamówienia na adres email i wstawia wartości do tabeli SQL
         {
-            if (productsList.Count != 0) // gdy lista produktów nie jest pusta
+            if (!productSalesList.Any())
             {
-                Order order = new Order(new List<Components.Product>())
-                    {
-                        Email = email
-                    };// stwórz zamówienie (obiekt) z listy produktów
-                    
-
-                    bool email_sent = MailSender.Email(MailSender.ContentEmail(order), _options, order.Get_Order_Nr()); // prześlij zamówienie na maila
-
-                    if(email_sent)
-                    {
-                        // dodawanie rekordów do tabeli 
-                        using (ConnectionDB_LINQDataContext db = new ConnectionDB_LINQDataContext()) //DataContext źródło wszystkich encji (Produkty, Zamowienia) mapowanych za pośrednictwem połączenia z bazą danych (connectionString)
-                        {
-                            AppService.InsertDataToZamDatabase(db, order);
-
-                            // przeszukaj tabelę w celu znalezienia id zamówienia
-                            var id_order = AppService.SearchForIdInZamDatabase(db, order.Get_Order_Nr());
-
-                            // dla każdego produktu przypisz wartości poszczególnym kolumną               
-                            AppService.InsertDataToProdDatabase(db, new List<Components.Product>(), id_order);
-                        }
-                    }
-            }
-            else
-            {
-                MessageBox.Show("Dodaj coś do listy", "Zamówienie",
+                MessageBox.Show("Dodaj produkty", "Zamówienie",
                                    MessageBoxButtons.OK,
                                   MessageBoxIcon.Information);
+                  return;
+            }
+
+            try
+            {
+                var order = new OrderDetailsDto()
+                {
+                    Price = amountToPay,
+                    Email = email
+                };
+
+                foreach (var product in productSalesList)
+                {
+                    product.Email = email;
+                    order.Products.Add(product);
+                }
+
+                var id = _requestHandler.Send<IOrderService, Guid>(o => o.Add(order));
+                var orderFromDb = _requestHandler.Send<IOrderService, OrderDetailsDto>(o => o.Get(id));
+                var subject = $"Zamówienie nr {orderFromDb.OrderNumber}";
+                var content = orderFromDb.ContentEmail();
+
+                AsyncHelper.RunSync(() =>
+                    _requestHandler.Send<IMailSender, Task>((s) =>
+                        s.SendAsync(Email.Of(email),
+                            new EmailMessage(subject, content))));
+                
+                MessageBox.Show("Zamówienie wysłano na maila", "Email",
+                           MessageBoxButtons.OK,
+                          MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Wystąpił błąd podczas realizacji zamówienia", "Zamówienie",
+                           MessageBoxButtons.OK,
+                          MessageBoxIcon.Error);
             }
         }
 

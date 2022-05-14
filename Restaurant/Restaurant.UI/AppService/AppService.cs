@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Windows.Forms;
+using Restaurant.ApplicationLogic.Interfaces;
 using Restaurant.UI.Components;
 using Restaurant.UI.ConcreteComponents;
 using Restaurant.UI.ConcreteDecorator;
@@ -171,7 +172,7 @@ namespace Restaurant.UI
             }
         }
 
-        public static Options LoadSettings()
+        public static void LoadSettings()
         {
             string email_from = "";    // zmienna określająca email nadawcy
             string email_to = "";           // zmienna określająca email odbiorcy
@@ -217,12 +218,12 @@ namespace Restaurant.UI
                             MessageBox.Show("Wprowadź dane w ustawieniach", "Realizacja zamówienia",
                                               MessageBoxButtons.OK,
                                              MessageBoxIcon.Information);
-                            return null;
+                            return;
                         }
                         i++;
                     }
                     if (!CheckEmail(email_from) || !CheckEmail(email_to))
-                        return null;
+                        return;
                 }
             }
             catch (FileLoadException load_exception) // błąd wczytywania pliku
@@ -230,34 +231,34 @@ namespace Restaurant.UI
                 MessageBox.Show(load_exception.Message, "Błąd wczytywania pliku",
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Information);
-                return null;                // przerwij działanie funkcji
+                return;                // przerwij działanie funkcji
             }
             catch (FileNotFoundException not_found) // nie znaleziono pliku
             {
                 MessageBox.Show(not_found.Message, "Nie znaleziono pliku",
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Information);
-                return null;           // przerwij działanie funkcji
+                return;           // przerwij działanie funkcji
             }
             catch (IOException input_output_exception) // błąd wejścia/wyjścia
             {
                 MessageBox.Show(input_output_exception.Message, "Błąd",
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Information);
-                return null;        // przerwij działanie funkcji
+                return;        // przerwij działanie funkcji
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Błąd",
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Information);
-                return null;      // przerwij działanie funkcji
+                return;      // przerwij działanie funkcji
             }
 
             login.Replace(login.ToString(), EncodeDecodeString(login.ToString(), "decode"));
             pass.Replace(pass.ToString(), EncodeDecodeString(pass.ToString(), "decode"));
-
-            return new Options(); // utwórz obiekt użytkownika;
+            
+            return; // utwórz obiekt użytkownika;
         }
         #endregion
 

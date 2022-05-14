@@ -1,4 +1,5 @@
-﻿using Restaurant.UI.Dialog;
+﻿using Restaurant.ApplicationLogic.Interfaces;
+using Restaurant.UI.Dialog;
 using System;
 using System.IO;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Restaurant.UI
     {
         public const string EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
-        public static Options LoadOptions(this Options options)
+        public static IOptions LoadOptions(this IOptions options)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";
             try
@@ -60,7 +61,7 @@ namespace Restaurant.UI
             return options;
         }
 
-        public static Options SaveOptions(this Options options)
+        public static IOptions SaveOptions(this IOptions options)
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.txt";  // ścieżka do pliku settings.txt
             
