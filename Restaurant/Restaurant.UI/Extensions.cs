@@ -87,8 +87,8 @@ namespace Restaurant.UI
 
         public static string DecodeString(this string text)
         {
-            byte[] data = System.Convert.FromBase64String(text);
-            return System.Text.ASCIIEncoding.ASCII.GetString(data);
+            byte[] data = Convert.FromBase64String(text);
+            return ASCIIEncoding.ASCII.GetString(data);
         }
 
         public static void ShowDialog(string text, string caption, EventHandler eventHandler)
