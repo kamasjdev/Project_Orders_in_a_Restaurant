@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurant.Domain.Exceptions;
+using System;
 
 namespace Restaurant.Domain.Entities
 {
@@ -23,12 +24,12 @@ namespace Restaurant.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(additionName))
             {
-                throw new InvalidOperationException("AdditionName cannot be empty");
+                throw new RestaurantException("AdditionName cannot be empty", typeof(Addition).FullName, "AdditionName");
             }
 
             if (additionName.Length < 3)
             {
-                throw new InvalidOperationException("AdditionName should have at least 3 characters");
+                throw new RestaurantException("AdditionName should have at least 3 characters", typeof(Addition).FullName, "AdditionName");
             }
 
             AdditionName = additionName;
@@ -38,7 +39,7 @@ namespace Restaurant.Domain.Entities
         {
             if (price < 0)
             {
-                throw new InvalidOperationException($"Price '{price}' cannot be negative");
+                throw new RestaurantException($"Price '{price}' cannot be negative", typeof(Addition).FullName, "Price");
             }
 
             Price = price;

@@ -20,7 +20,16 @@ namespace Restaurant.Infrastructure.Requests
             using (var scope = _container.BeginScope())
             {
                 var service = _container.Resolve<TService>();
-                return action.Invoke(service);
+                var exceptionMapper = _container.Resolve<IMapToApplicationException>();
+                try
+                {
+                    return action.Invoke(service);
+                }
+                catch(Exception ex)
+                {
+                    var exception = exceptionMapper.Map(ex);
+                    throw exception;
+                }
             }
         }
 
@@ -30,7 +39,16 @@ namespace Restaurant.Infrastructure.Requests
             using (var scope = _container.BeginScope())
             {
                 var service = _container.Resolve<TService>();
-                action(service);
+                var exceptionMapper = _container.Resolve<IMapToApplicationException>();
+                try
+                {
+                    action(service);
+                }
+                catch(Exception ex)
+                {
+                    var exception = exceptionMapper.Map(ex);
+                    throw exception;
+                }
             }
         }
     }

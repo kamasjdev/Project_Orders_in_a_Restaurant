@@ -220,39 +220,32 @@ namespace Restaurant.UI
 
             Extensions.ShowDialog("Wprowadź uwagi do zamówienia", "Uwagi", AddNotes);
 
-            try
+            var order = new OrderDetailsDto()
             {
-                var order = new OrderDetailsDto()
-                {
-                    Price = amountToPay,
-                    Email = email,
-                    Note = notes
-                };
+                Price = amountToPay,
+                Email = email,
+                Note = notes
+            };
 
-                foreach (var product in productSalesList)
-                {
-                    product.Email = email;
-                    order.Products.Add(product);
-                }
+            foreach (var product in productSalesList)
+            {
+                product.Email = email;
+                order.Products.Add(product);
+            }
 
-                var id = _requestHandler.Send<IOrderService, Guid>(o => o.Add(order));
-                var orderFromDb = _requestHandler.Send<IOrderService, OrderDetailsDto>(o => o.Get(id));
-                var subject = $"Zamówienie nr {orderFromDb.OrderNumber}";
-                var content = orderFromDb.ContentEmail();
+            var id = _requestHandler.Send<IOrderService, Guid>(o => o.Add(order));
+            var orderFromDb = _requestHandler.Send<IOrderService, OrderDetailsDto>(o => o.Get(id));
+            var subject = $"Zamówienie nr {orderFromDb.OrderNumber}";
+            var content = orderFromDb.ContentEmail();
 
-                AsyncHelper.RunSync(() =>
-                    _requestHandler.Send<IMailSender, Task>((s) =>
-                        s.SendAsync(Email.Of(email),
-                            new EmailMessage(subject, content))));
+            AsyncHelper.RunSync(() =>
+                _requestHandler.Send<IMailSender, Task>((s) =>
+                    s.SendAsync(Email.Of(email),
+                        new EmailMessage(subject, content))));
                 
-                MessageBox.Show("Zamówienie wysłano na maila", "Email",
-                           MessageBoxButtons.OK,
-                          MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                ex.MapToMessageBox("Zamówienie");
-            }
+            MessageBox.Show("Zamówienie wysłano na maila", "Email",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
         }
 
         private void OnLoad(object sender, EventArgs e)

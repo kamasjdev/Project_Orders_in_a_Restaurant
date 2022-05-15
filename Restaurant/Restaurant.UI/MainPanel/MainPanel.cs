@@ -38,15 +38,15 @@ namespace Restaurant.UI
             {
                 _options.LoadOptions();
             }
-            catch(Exception exception)
+            catch
             {
-                exception.MapToMessageBox("Wczytywanie pliku");
                 settings1.BringToFront();
                 settings1.Visible = true;
                 history1.Enabled = false;
                 history1.Visible = false;
                 menu1.Enabled = false;
                 menu1.Visible = false;
+                throw;
             }            
         }
 

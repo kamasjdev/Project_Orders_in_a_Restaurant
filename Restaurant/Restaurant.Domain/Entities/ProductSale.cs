@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurant.Domain.Exceptions;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Restaurant.Domain.Entities
@@ -39,7 +40,7 @@ namespace Restaurant.Domain.Entities
         {
             if (product is null)
             {
-                throw new InvalidOperationException("Cannot add null product");
+                throw new RestaurantException("Cannot add null product", typeof(ProductSale).FullName, "Product");
             }
 
             if (Product != null)
@@ -56,7 +57,7 @@ namespace Restaurant.Domain.Entities
         {
             if (addition is null)
             {
-                throw new InvalidOperationException("Cannot add null addition");
+                throw new RestaurantException("Cannot add null addition", typeof(ProductSale).FullName, "Addition");
             }
 
             if (Addition != null)
@@ -73,7 +74,7 @@ namespace Restaurant.Domain.Entities
         {
             if (Addition is null)
             {
-                throw new InvalidOperationException("There is no addition in product");
+                throw new RestaurantException("There is no addition in product", typeof(ProductSale).FullName, "Additon");
             }
 
             EndPrice -= Addition.Price;
@@ -85,12 +86,12 @@ namespace Restaurant.Domain.Entities
         {
             if (order is null)
             {
-                throw new InvalidOperationException("Cannot assign null order");
+                throw new RestaurantException("Cannot assign null order", typeof(ProductSale).FullName, "AddOrder");
             }
 
             if (Order != null)
             {
-                throw new InvalidOperationException("Cannot override existing order");
+                throw new RestaurantException("Cannot override existing order", typeof(ProductSale).FullName, "AddOrder");
             }
 
             Order = order;
@@ -102,7 +103,7 @@ namespace Restaurant.Domain.Entities
         {
             if (Order is null)
             {
-                throw new InvalidOperationException("Cannot remove product, because there is no ordered");
+                throw new RestaurantException("Cannot remove product, because there is no ordered", typeof(ProductSale).FullName, "RemoveOrder");
             }
 
             Order = null;

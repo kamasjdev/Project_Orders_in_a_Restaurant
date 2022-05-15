@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Restaurant.UI
@@ -17,8 +18,17 @@ namespace Restaurant.UI
             container.Register(Castle.MicroKernel.Registration.Component.For<Settings>().LifestyleSingleton());
             container.Register(Castle.MicroKernel.Registration.Component.For<History>().LifestyleSingleton());
             Application.EnableVisualStyles();
+            // Add handler to handle the exception raised by main threads
+            Application.ThreadException += new ThreadExceptionEventHandler(ApplicationThreadException);
+
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(container.Resolve<MainPanel>());
+        }
+
+        // All exceptions thrown by the main thread are handled over this method
+        static void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            e.Exception.MapToMessageBox();
         }
     }
 }

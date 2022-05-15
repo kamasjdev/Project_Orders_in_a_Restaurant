@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Restaurant.Domain.Exceptions;
 
 namespace Restaurant.ApplicationLogic.Mail
 {
@@ -14,12 +14,12 @@ namespace Restaurant.ApplicationLogic.Mail
         {
             if (string.IsNullOrWhiteSpace(subject))
             {
-                throw new InvalidOperationException("Email cannot be empty");
+                throw new RestaurantServerException("Subject cannot be empty", typeof(EmailMessage).FullName, "PrepareEmailSend");
             }
 
             if (string.IsNullOrWhiteSpace(body))
             {
-                throw new InvalidOperationException("Email cannot be empty");
+                throw new RestaurantServerException("Body cannot be empty", typeof(EmailMessage).FullName, "PrepareEmailSend");
             }
 
             _subject = subject;

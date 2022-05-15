@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurant.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,7 +29,7 @@ namespace Restaurant.Domain.Entities
         {
             if (price < 0)
             {
-                throw new InvalidOperationException($"Price '{price}' cannot be negative");
+                throw new RestaurantException($"Price '{price}' cannot be negative", typeof(Product).FullName, "Price");
             }
 
             Price = price;
@@ -38,12 +39,12 @@ namespace Restaurant.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(productName))
             {
-                throw new InvalidOperationException("ProductName cannot be empty");
+                throw new RestaurantException("ProductName cannot be empty", typeof(Product).FullName, "ProductName");
             }
 
             if (productName.Length < 3)
             {
-                throw new InvalidOperationException("ProductName should have at least 3 characters");
+                throw new RestaurantException("ProductName should have at least 3 characters", typeof(Product).FullName, "ProductName");
             }
 
             ProductName = productName;
@@ -53,7 +54,7 @@ namespace Restaurant.Domain.Entities
         {
             if (orders is null)
             {
-                throw new InvalidOperationException("Cannot add empty orders");
+                throw new RestaurantException("Cannot add empty orders", typeof(Product).FullName, "AddOrders");
             }
 
             foreach (var order in orders)
@@ -66,14 +67,14 @@ namespace Restaurant.Domain.Entities
         {
             if (order is null)
             {
-                throw new InvalidOperationException("Cannot add null order");
+                throw new RestaurantException("Cannot add null order", typeof(Product).FullName, "AddOrder");
             }
 
             var orderToAdd = _orders.Where(p => p.Id == order.Id).SingleOrDefault();
 
             if (orderToAdd != null)
             {
-                throw new InvalidOperationException($"Order with id '{orderToAdd.Id}' exists");
+                throw new RestaurantException($"Order with id '{orderToAdd.Id}' exists", typeof(Product).FullName, "AddOrder");
             }
 
             _orders.Add(order);

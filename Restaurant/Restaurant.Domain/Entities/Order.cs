@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Restaurant.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Restaurant.Domain.Entities
 {
@@ -38,12 +38,12 @@ namespace Restaurant.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(orderNumber))
             {
-                throw new InvalidOperationException("OrderNumber cannot be empty");
+                throw new RestaurantException("OrderNumber cannot be empty", typeof(Order).FullName, "OrderNumber");
             }
 
             if (orderNumber.Length < 3)
             {
-                throw new InvalidOperationException("OrderNumber should have at least 3 characters");
+                throw new RestaurantException("OrderNumber should have at least 3 characters", typeof(Order).FullName, "OrderNumber");
             }
 
             OrderNumber = orderNumber;
@@ -53,7 +53,7 @@ namespace Restaurant.Domain.Entities
         {
             if (price < 0)
             {
-                throw new InvalidOperationException($"Price '{price}' cannot be negative");
+                throw new RestaurantException($"Price '{price}' cannot be negative", typeof(Order).FullName, "Price");
             }
 
             Price = price;
@@ -68,7 +68,7 @@ namespace Restaurant.Domain.Entities
         {
             if (products is null)
             {
-                throw new InvalidOperationException("Cannot add empty products");
+                throw new RestaurantException("Cannot add empty products", typeof(Order).FullName, "AddProducts");
             }
 
             foreach (var product in products)
@@ -81,14 +81,14 @@ namespace Restaurant.Domain.Entities
         {
             if (product is null)
             {
-                throw new InvalidOperationException("Cannot add null product");
+                throw new RestaurantException("Cannot add null product", typeof(Order).FullName, "AddProduct");
             }
 
             var productToAdd = _products.Where(p => p.Id == product.Id).SingleOrDefault();
 
             if (productToAdd != null)
             {
-                throw new InvalidOperationException($"Product with id '{productToAdd.Id}' exists");
+                throw new RestaurantException($"Product with id '{productToAdd.Id}' exists", typeof(Order).FullName, "AddProduct");
             }
 
             _products.Add(product);
@@ -99,14 +99,14 @@ namespace Restaurant.Domain.Entities
         {
             if (product is null)
             {
-                throw new InvalidOperationException("Cannot remove null product");
+                throw new RestaurantException("Cannot remove null product", typeof(Order).FullName, "RemoveProduct");
             }
 
             var productToDelete = _products.Where(p => p.Id == product.Id).SingleOrDefault();
 
             if (productToDelete is null)
             {
-                throw new InvalidOperationException($"Product with id '{productToDelete.Id}' not found");
+                throw new RestaurantException($"Product with id '{productToDelete.Id}' not found", typeof(Order).FullName, "RemoveProduct");
             }
 
             _products.Remove(product);

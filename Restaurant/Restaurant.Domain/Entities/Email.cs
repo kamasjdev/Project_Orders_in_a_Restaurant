@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurant.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,12 +17,12 @@ namespace Restaurant.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                throw new InvalidOperationException("Email cannot be empty");
+                throw new RestaurantException("Email cannot be empty", typeof(Email).FullName, "EmailOperation");
             }
 
             if (!Regex.Match(email, EMAIL_PATTERN).Success)
             {
-                throw new InvalidOperationException("Invalid Email");
+                throw new RestaurantException("Invalid Email", typeof(Email).FullName, "EmailOperation");
             }
 
             _email = email;

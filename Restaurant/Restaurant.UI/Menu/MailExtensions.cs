@@ -1,4 +1,5 @@
 ﻿using Restaurant.ApplicationLogic.DTO;
+using Restaurant.UI.Exceptions;
 using System;
 using System.Text;
 
@@ -12,7 +13,7 @@ namespace Restaurant.UI
 
             if (order == null)
             {
-                throw new InvalidOperationException("There is no order to sent");
+                throw new RestaurantClientException("There is no order to sent", typeof(MailExtensions).FullName, "CreateEmail");
             }
 
             messageBody.Append("<font>Nr zamówienia: " + order.OrderNumber + ", data zamówienia: " 

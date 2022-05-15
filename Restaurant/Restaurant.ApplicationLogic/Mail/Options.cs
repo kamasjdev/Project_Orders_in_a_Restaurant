@@ -1,5 +1,5 @@
-﻿using Restaurant.ApplicationLogic.Interfaces;
-using System;
+﻿using Restaurant.Domain.Exceptions;
+using Restaurant.ApplicationLogic.Interfaces;
 using System.Text.RegularExpressions;
 
 namespace Restaurant.ApplicationLogic.Mail
@@ -22,12 +22,12 @@ namespace Restaurant.ApplicationLogic.Mail
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new InvalidOperationException("Email cannot be empty");
+                    throw new RestaurantServerException("Email cannot be empty", typeof(Options).FullName, "OptionsEmail");
                 }
 
                 if (!Regex.Match(value, EMAIL_PATTERN).Success)
                 {
-                    throw new InvalidOperationException("Invalid Email");
+                    throw new RestaurantServerException("Invalid Email", typeof(Options).FullName, "OptionsEmail");
                 }
 
                 _email = value;

@@ -1,5 +1,7 @@
 ﻿using Restaurant.ApplicationLogic.Interfaces;
+using Restaurant.Domain.Exceptions;
 using Restaurant.UI.Dialog;
+using Restaurant.UI.Exceptions;
 using System;
 using System.IO;
 using System.Text;
@@ -50,7 +52,7 @@ namespace Restaurant.UI
 
                 if (options.IsEmpty())
                 {
-                    throw new InvalidOperationException("Dane są puste uzupełnij je");
+                    throw new RestaurantClientException("Nie wszystkie pola są wypełnione", typeof(Extensions).FullName, "LoadOptions");
                 }
             }
             catch
@@ -95,29 +97,43 @@ namespace Restaurant.UI
             prompt.ShowDialog();
         }
 
-        public static void MapToMessageBox(this Exception exception, string context)
+        public static void MapToMessageBox(this Exception exception)
         {
             if (exception.GetType() == typeof(FileLoadException))
             {
-                MessageBox.Show(exception.Message, context,
+                MessageBox.Show(exception.Message, "FileLoad",
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Error);
             }
             else if (exception.GetType() == typeof(FileNotFoundException))
             {
-                MessageBox.Show(exception.Message, context,
+                MessageBox.Show(exception.Message, "NotFoundFile",
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Error);
             }
             else if (exception.GetType() == typeof(InvalidOperationException))
             {
-                MessageBox.Show(exception.Message, context,
+                MessageBox.Show(exception.Message, "InvalidOperation",
+                               MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+            }
+            else if(exception.GetType() == typeof(RestaurantServerException))
+            {
+                MessageBox.Show(exception.Message,
+                        ((RestaurantServerException)exception).Context,
+                               MessageBoxButtons.OK,
+                              MessageBoxIcon.Error);
+            }
+            else if (exception.GetType() == typeof(RestaurantClientException))
+            {
+                MessageBox.Show(exception.Message, 
+                        ((RestaurantClientException) exception).Context,
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Coś poszło nie tak", context,
+                MessageBox.Show("Coś poszło nie tak", "Error",
                                MessageBoxButtons.OK,
                               MessageBoxIcon.Error);
             }

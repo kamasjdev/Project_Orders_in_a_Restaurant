@@ -1,10 +1,10 @@
-﻿using Restaurant.ApplicationLogic.Interfaces;
+﻿using Restaurant.Domain.Exceptions;
+using Restaurant.ApplicationLogic.Interfaces;
 using System;
 using System.Net;
 using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace Restaurant.ApplicationLogic.Mail
 {
@@ -23,7 +23,7 @@ namespace Restaurant.ApplicationLogic.Mail
 
             if (isEmpty)
             {
-                throw new InvalidOperationException("There is no configured email");
+                throw new RestaurantServerException("There is no configured emai", typeof(MailSender).FullName, "SendMail");
             }
 
             var mail = new MailMessage(_options.Email, email.Value);
@@ -54,7 +54,7 @@ namespace Restaurant.ApplicationLogic.Mail
                 }
                 catch
                 {
-                    throw new InvalidOperationException("Mail can't be sent. Probably invalid settings, please fill properly");
+                    throw new RestaurantServerException("Mail can't be sent. Probably invalid settings, please fill properly", typeof(MailSender).FullName, "SendMail");
                 }
                 
             }
