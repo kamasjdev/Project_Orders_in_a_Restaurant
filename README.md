@@ -42,7 +42,7 @@ BEGIN TRANSACTION;
 		Note TEXT,
 		PRIMARY KEY (Id)
 	);
-	CREATE UNIQUE INDEX idx_orders_order_number ON orders (OrderNumber);
+	CREATE UNIQUE INDEX uidx_orders_order_number ON orders (OrderNumber);
 	CREATE INDEX idx_orders_created ON orders (Created);
 	CREATE INDEX idx_orders_email ON orders (Email);
 
