@@ -53,7 +53,7 @@ namespace Restaurant.IntegrationTests
         [Test]
         public void given_valid_product_should_update()
         {
-            var order = new Order(id: Guid.NewGuid(), price: 105.50M, orderNumber: "ORD/5", email: Email.Of("email@email.com"), created: DateTime.UtcNow);
+            var order = new Order(id: Guid.NewGuid(), price: 105.50M, orderNumber: "ORD/25", email: Email.Of("email@email.com"), created: DateTime.UtcNow);
             repository.Add(order);
             var orderModified = new Order(id: order.Id, price: 125.55M, orderNumber: "ORD/524", email: order.Email, created: order.Created);
 
