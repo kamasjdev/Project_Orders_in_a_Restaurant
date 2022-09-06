@@ -92,54 +92,55 @@ namespace Restaurant.UI
 
         private void DeleteFromOrder(object sender, EventArgs e)
         {
-            if (listViewOrderedProducts.SelectedItems != null)
+            if (listViewOrderedProducts.SelectedItems == null)
             {
-                if (listViewOrderedProducts.SelectedIndices.Count <= 0)
+                return;
+            }
+
+            if (listViewOrderedProducts.SelectedIndices.Count <= 0)
+            {
+                return;
+            }
+
+            var result = MessageBox.Show("Czy chcesz usunąć danie", "Usuń danie",
+                        MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes)
+            {
+                return;
+            }
+             
+            for (int i = listViewOrderedProducts.SelectedIndices.Count - 1; i >= 0; i--)
+            {
+                int selectedindex = listViewOrderedProducts.SelectedIndices[i];
+                var item = listViewOrderedProducts.Items[selectedindex].Text;
+                var key = listViewOrderedProducts.Items[selectedindex].Name;
+                var id = new Guid(key);
+                listViewOrderedProducts.Items.RemoveAt(selectedindex);
+                            
+                var product = _products.Where(p => p.ProductName == item).FirstOrDefault();
+                var productSale = productSalesList.Where(p => p.Id == id).SingleOrDefault();
+                if (product != null)
                 {
-                    return;
+                    var itemToRemove = listViewOrderedProducts.Items[key];
+                    listViewOrderedProducts.Items.Remove(itemToRemove);
+                    productSalesList.Remove(productSale);
+                    continue;
                 }
 
-                else if (listViewOrderedProducts.SelectedIndices.Count >= 1)
+                var addition = _additions.Where(a => a.AdditionName == item).FirstOrDefault();
+                if (addition != null)
                 {
-                    var result = MessageBox.Show("Czy chcesz usunąć danie", "Usuń danie",
-                               MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Question);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        for (int i = listViewOrderedProducts.SelectedIndices.Count - 1; i >= 0; i--)
-                        {
-                            int selectedindex = listViewOrderedProducts.SelectedIndices[i];
-                            var item = listViewOrderedProducts.Items[selectedindex].Text;
-                            var key = listViewOrderedProducts.Items[selectedindex].Name;
-                            var id = new Guid(key);
-                            listViewOrderedProducts.Items.RemoveAt(selectedindex);
-                            
-                            var product = _products.Where(p => p.ProductName == item).FirstOrDefault();
-                            var productSale = productSalesList.Where(p => p.Id == id).SingleOrDefault();
-                            if (product != null)
-                            {
-                                var itemToRemove = listViewOrderedProducts.Items[key];
-                                listViewOrderedProducts.Items.Remove(itemToRemove);
-                                productSalesList.Remove(productSale);
-                                continue;
-                            }
-
-                            var addition = _additions.Where(a => a.AdditionName == item).FirstOrDefault();
-                            if (addition != null)
-                            {
-                                productSale.Addition = null;
-                                productSale.AdditionId = null;
-                                productSale.EndPrice -= addition.Price;
-                                continue;
-                            }
-                        }
-                    }
+                    productSale.Addition = null;
+                    productSale.AdditionId = null;
+                    productSale.EndPrice -= addition.Price;
+                    continue;
                 }
             }
         }
 
-        private void RefreshCost(object sender, EventArgs e) // funkcja wywołana przez timer1 (interwał co 1s)
+        private void RefreshCost(object sender, EventArgs e)
         {
             if (currentProduct != null)
             {
@@ -169,7 +170,7 @@ namespace Restaurant.UI
             labelCostOfOrder.Text = "Koszt: " + amountToPay.WithTwoDecimalPoints() + "zł";
         }
 
-        private void LoadLeftMenu(object sender, EventArgs e) // funkcja wykrywająca zmianę pozycji Visible
+        private void LoadLeftMenu(object sender, EventArgs e)
         {
             if (this.Visible == true)
             {
@@ -238,8 +239,7 @@ namespace Restaurant.UI
             var subject = $"Zamówienie nr {orderFromDb.OrderNumber}";
             var content = orderFromDb.ContentEmail();
 
-            AsyncHelper.RunSync(() =>
-                _requestHandler.Send<IMailSender, Task>((s) =>
+            Task.Run(() => _requestHandler.Send<IMailSender, Task>((s) =>
                     s.SendAsync(Email.Of(email),
                         new EmailMessage(subject, content))));
                 
