@@ -61,6 +61,7 @@ namespace Restaurant.UI
             {
                 label3.Visible = false;
                 comboBoxAdditions.Visible = false;
+                comboBoxAdditions.SelectedItem = null;
             }
         }
 
@@ -130,13 +131,15 @@ namespace Restaurant.UI
                 }
 
                 var addition = _additions.Where(a => a.AdditionName == item).FirstOrDefault();
-                if (addition != null)
+                
+                if (addition == null)
                 {
-                    productSale.Addition = null;
-                    productSale.AdditionId = null;
-                    productSale.EndPrice -= addition.Price;
                     continue;
                 }
+
+                productSale.Addition = null;
+                productSale.AdditionId = null;
+                productSale.EndPrice -= addition.Price;
             }
         }
 
@@ -147,17 +150,13 @@ namespace Restaurant.UI
                 var additionPrice = currentAddition != null ? currentAddition.Price : decimal.Zero;
                 var amountPrice = currentProduct.Price + additionPrice;
                 PriceProduct.Text = $"{amountPrice.WithTwoDecimalPoints()} zł";
-
-                if (amountPrice > 0)
-                {
-                    PriceProduct.Visible = true;
-                    PriceProductLabel.Visible = true;
-                }
-                else
-                {
-                    PriceProduct.Visible = false;
-                    PriceProductLabel.Visible = false;
-                }
+                PriceProduct.Visible = true;
+                PriceProductLabel.Visible = true;
+            }
+            else
+            {
+                PriceProduct.Visible = false;
+                PriceProductLabel.Visible = false;
             }
 
             amountToPay = decimal.Zero;
@@ -181,6 +180,24 @@ namespace Restaurant.UI
             {
                 timer1.Enabled = false;
                 productSalesList.Clear();
+                listViewOrderedProducts.Clear();
+
+                if (currentProduct != null)
+                {
+                    currentProduct = null;
+                    PriceProduct.Visible = false;
+                    PriceProductLabel.Visible = false;
+                }
+
+                if (comboBoxMainDishes1.Items.Count > 0)
+                {
+                    comboBoxMainDishes1.SelectedItem = null;
+                }
+
+                if (comboBoxAdditions.Items.Count > 0)
+                {
+                    comboBoxAdditions.SelectedItem = null;
+                }
             }
         }
 
