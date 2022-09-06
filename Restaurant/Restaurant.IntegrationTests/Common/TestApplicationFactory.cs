@@ -1,6 +1,7 @@
 ﻿using Castle.Windsor;
 using Restaurant.UI;
 using System;
+using System.Configuration;
 using System.Linq;
 
 namespace Restaurant.IntegrationTests.Common
@@ -18,7 +19,7 @@ namespace Restaurant.IntegrationTests.Common
 
         private static string GetDatabaseFileName()
         {
-            var connectionSplited = "Data Source=restaurant_test.db;New=True;BinaryGuid=False"
+            var connectionSplited = ConfigurationManager.ConnectionStrings["RestaurantDb"].ToString()
                .Split(';').AsEnumerable();
             var dataSource = connectionSplited.Where(s => s.Contains("Data Source=")).FirstOrDefault();
 

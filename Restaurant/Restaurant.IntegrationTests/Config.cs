@@ -3,6 +3,7 @@ using Castle.Windsor;
 using NUnit.Framework;
 using Restaurant.IntegrationTests.Common;
 using System;
+using System.Configuration;
 using System.IO;
 
 namespace Restaurant.IntegrationTests

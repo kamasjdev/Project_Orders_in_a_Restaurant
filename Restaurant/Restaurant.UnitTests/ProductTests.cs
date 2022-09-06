@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Restaurant.Domain.Entities;
+using Restaurant.Domain.Exceptions;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => product.ChangeProductName(productName));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("ProductName cannot be empty");
         }
         
@@ -47,7 +48,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => product.ChangeProductName(productName));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("at least 3 characters");
         }
 
@@ -74,7 +75,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => product.ChangePrice(price));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("cannot be negative");
         }
 
@@ -111,7 +112,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => product.AddOrders(null));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("Cannot add empty orders");
         }
     }

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Restaurant.Domain.Entities;
+using Restaurant.Domain.Exceptions;
 using Shouldly;
 using System;
 
@@ -32,7 +33,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => order.ChangeOrderNumber(secondOrderNumber));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("cannot be empty");
         }
 
@@ -46,7 +47,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => order.ChangeOrderNumber(secondOrderNumber));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("at least 3 characters");
         }
 
@@ -73,7 +74,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => order.ChangePrice(secondPrice));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("cannot be negative");
         }
 
@@ -98,7 +99,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => Email.Of(secondEmail));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("Email cannot be empty");
         }
 
@@ -110,7 +111,7 @@ namespace Restaurant.UnitTests
             var exception = Should.Throw<Exception>(() => Email.Of(secondEmail));
 
             exception.ShouldNotBeNull();
-            exception.ShouldBeOfType<InvalidOperationException>();
+            exception.ShouldBeOfType<RestaurantException>();
             exception.Message.ShouldContain("Invalid Email");
         }
 
