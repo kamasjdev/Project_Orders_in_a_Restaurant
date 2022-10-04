@@ -13,7 +13,7 @@ namespace Restaurant.Infrastructure.Mappings
 
         public override Guid Parse(object value)
         {
-            var guid = new Guid((string)value);
+            var guid = (Guid)value;
             return guid;
         }
     }
