@@ -9,9 +9,4 @@
     <PackageReference Include="FluentMigrator.Runner.SQLite" Version="3.3.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Additions\" />
-    <Folder Include="ProductSales\" />
-  </ItemGroup>
-
 </Project>

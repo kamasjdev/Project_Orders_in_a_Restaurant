@@ -3,7 +3,7 @@
 namespace Restaurant.Migrations.Additions
 {
     [Migration(202210041810)]
-    public sealed class InitCreateTable_04_10_2022_18_10 : Migration
+    public sealed class InitCreateTableAdditions_04_10_2022_18_10 : Migration
     {
         public override void Down()
         {

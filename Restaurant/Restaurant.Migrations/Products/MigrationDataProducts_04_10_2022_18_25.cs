@@ -65,7 +65,7 @@ namespace Restaurant.Migrations.Products
                 .Row(new Dictionary<string, object>
                 {
                     { "Id", new Guid("00000000-0000-0000-0000-000000000004") },
-                    { "AdditionName", "Pizza Venecia" },
+                    { "ProductName", "Pizza Venecia" },
                     { "Price", 25M },
                     { "ProductKind", 0 }
                 });

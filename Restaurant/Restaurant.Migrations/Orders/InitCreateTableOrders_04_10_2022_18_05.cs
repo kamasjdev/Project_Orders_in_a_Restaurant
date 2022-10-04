@@ -4,7 +4,7 @@ using System;
 namespace Restaurant.Migrations.Orders
 {
     [Migration(202210041805)]
-    public sealed class InitCreateTable_04_10_2022_18_05 : Migration
+    public sealed class InitCreateTableOrders_04_10_2022_18_05 : Migration
     {
         public override void Down()
         {
@@ -19,7 +19,7 @@ namespace Restaurant.Migrations.Orders
                 .WithColumn("Price").AsDecimal().NotNullable()
                 .WithColumn("Created").AsDateTime().NotNullable().Indexed("idx_orders_created")
                 .WithColumn("Email").AsString(300).NotNullable().Indexed("idx_orders_email")
-                .WithColumn("Note").AsString(5000).NotNullable();
+                .WithColumn("Note").AsString(5000).Nullable();
         }
     }
 }
