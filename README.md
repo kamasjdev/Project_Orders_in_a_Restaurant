@@ -85,3 +85,12 @@ BEGIN TRANSACTION;
 	CREATE INDEX idx_migrations_name ON migrations (Name);
 
 COMMIT;
+```
+
+screeny:
+
+![][screen1.png]
+![][screen2.png]
+![][screen3.png]
+![][screen4.png]
+![][screen5.png]
