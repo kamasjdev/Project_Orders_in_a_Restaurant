@@ -18,7 +18,7 @@ Do zapisywania zamówień wykorzystano bazę SQLite. Baza danych została dodana
 
 ![](https://raw.githubusercontent.com/kamasjdev/Project_Orders_in_a_Restaurant/master/schemat_bazy_danych.png)
 
-Schemat wraz z tabelami są automatycznie tworzone podczas startu aplikacji
+Schemat wraz z tabelami jest automatycznie tworzony podczas startu aplikacji
 
 # Screen
 
